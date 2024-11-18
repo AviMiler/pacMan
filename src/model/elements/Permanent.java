@@ -6,7 +6,6 @@ public class Permanent extends Element{
 
     public Permanent(int x, int y) {
         super(x,y);
-        this.positionSize = Screen.getTileSize();
 
     }
 

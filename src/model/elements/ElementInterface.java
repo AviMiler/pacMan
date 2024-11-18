@@ -1,16 +1,15 @@
 package model.elements;
 
+import services.Consts;
 import view.Screen;
 
+import javax.swing.*;
 import java.awt.*;
 
 public interface ElementInterface {
 
-    public int getIndexPositionX();
-    public int getIndexPositionY();
-
-    public int getPixelPositionX();
-    public int getPixelPositionY();
+    public Point getIndexPoint();
+    public Point getPixelPoint();
 
     public Image getImage();
 
@@ -26,14 +25,15 @@ public interface ElementInterface {
     public void setIndexPositionX(int x);
     public void setIndexPositionY(int y);
 
-    public void setPixelPositionX(int x);
-    public void setPixelPositionY(int y);
+    public void setPixelPosition(int dir);
 
     public void straitX();
     public void straitY();
 
-    public void setImage(Image image);
-    public void setSize(int size);
+    public void setImage(int direction);
+
+    public void beat();
+
     public void updateScore(int score);
 
     public void upSpeed();

@@ -22,8 +22,8 @@ public class Prise extends Element {
     }
     public Prise() {
         super(0,0);
-        this.indexPositionX=9;
-        this.indexPositionY=9;
+        this.getIndexPoint().x=9;
+        this.getIndexPoint().y=9;
         this.type = calculateType();
         this.score=priseScores[type];
         this.imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\prises\\"+type+".png";

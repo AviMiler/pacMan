@@ -16,7 +16,7 @@ public class Ghost extends Element implements ElementInterface {
     private int direction;
 
     public Ghost(int type){
-        super(9+type,10);
+        super(9+type,8);
         this.type=type;
         imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\ghosts\\"+type+"\\";
         image = new ImageIcon( imagesPath+0 + ".png").getImage();
@@ -42,28 +42,27 @@ public class Ghost extends Element implements ElementInterface {
         return ghosts;
     }
 
-    public void calculateDirection(Point target){
+    public void calculateDirection(Point target) {
 
-        Point nextPosition = new Point(this.pixelPositionX,this.pixelPositionY);
+        Point nextPosition = new Point(this.getPixelPositionX(), this.getPixelPositionY());
         Point nextPosition2;
-        int oldDirection = direction,newIndex;
-        direction = 0;
-
+        int oldDirection = direction, newIndex;
+        this.direction = 0;
 
         //set as up
         if (oldDirection != Consts.DOWN) {
             newIndex = this.getPixelPositionY() - this.getSpeed();
-            if (!Collisions.isTouchWall(this.getIndexPositionX(),(newIndex)/Screen.getTileSize())) {
-                nextPosition = new Point(this.getPixelPositionX(),newIndex);
+            if (!Collisions.isTouchWall(this, Consts.UP)) {
+                nextPosition = new Point(this.getPixelPositionX(), newIndex);
                 this.direction = Consts.UP;
             }
         }
         //check if left is shorter
         if (oldDirection != Consts.RIGHT) {
             newIndex = this.getPixelPositionX() - this.getSpeed();
-            if (!Collisions.isTouchWall((newIndex)/Screen.getTileSize(),this.getIndexPositionY())) {
+            if (!Collisions.isTouchWall(this, Consts.LEFT)) {
                 nextPosition2 = new Point(newIndex, this.getPixelPositionY());
-                if (checkIfBCloserThenA(nextPosition, nextPosition2,target)) {
+                if (checkIfBCloserThenA(nextPosition, nextPosition2, target)) {
                     nextPosition = nextPosition2;
                     this.direction = Consts.LEFT;
                 }
@@ -72,9 +71,9 @@ public class Ghost extends Element implements ElementInterface {
         //check if down shorter
         if (oldDirection != Consts.UP) {
             newIndex = this.getPixelPositionY() + this.getSpeed();
-            if (!Collisions.isTouchWall(this.getIndexPositionX(),(newIndex)/Screen.getTileSize()+1)) {
+            if (!Collisions.isTouchWall(this, Consts.DOWN)) {
                 nextPosition2 = new Point(this.getPixelPositionX(), newIndex);
-                if (checkIfBCloserThenA(nextPosition, nextPosition2,target)) {
+                if (checkIfBCloserThenA(nextPosition, nextPosition2, target)) {
                     nextPosition = nextPosition2;
                     this.direction = Consts.DOWN;
                 }
@@ -83,16 +82,16 @@ public class Ghost extends Element implements ElementInterface {
 
         //check if right sorter
         if (oldDirection != Consts.LEFT) {
-
             newIndex = this.getPixelPositionX() + this.getSpeed();
-            if (!Collisions.isTouchWall((newIndex+Screen.getTileSize()-1)/Screen.getTileSize(),this.getIndexPositionY())) {
-                nextPosition2 = new Point(newIndex, this.getPixelPositionY());
-                if (checkIfBCloserThenA(nextPosition, nextPosition2,target)) {
+            if (!Collisions.isTouchWall(this, Consts.RIGHT)) {
+                nextPosition2 = new Point(newIndex, this.getIndexPositionY());
+                if (checkIfBCloserThenA(nextPosition, nextPosition2, target)) {
                     this.direction = Consts.RIGHT;
                 }
             }
         }
     }
+
 
     private boolean checkIfBCloserThenA(Point positionA, Point positionB,Point target){
         return positionA.distance(target)>positionB.distance(target);

@@ -56,7 +56,7 @@ public class MenuPanel extends JPanel {
     }
     public int getChoice() {
         while (choice == 0){
-            System.out.println("waiting for choice");
+            System.out.print("");
         }
         return choice;
     }

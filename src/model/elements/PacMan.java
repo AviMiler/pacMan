@@ -33,6 +33,8 @@ public class PacMan extends Element {
     public void setPosition(){
         this.setPixelPositionY(Map.getPMStartY()*Screen.getTileSize());
         this.setPixelPositionX(Map.getPMStartX()*Screen.getTileSize());
+        this.getPixelPoint().x=Map.getPMStartX()*Screen.getTileSize();
+        this.getPixelPoint().y=Map.getPMStartY()*Screen.getTileSize();
     }
 
     public void removeLife() {

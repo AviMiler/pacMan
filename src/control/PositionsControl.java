@@ -14,49 +14,47 @@ public class PositionsControl {
 
     public static void updatePacMan(PacMan pacMan,GamePanel gamePanel) {
 
-        int newIndex;
         pacMan.beat();
 
-        if (gamePanel.getDirection() == Consts.UP) {
-            newIndex = pacMan.getPixelPositionY() - pacMan.getSpeed();
-            if (!Collisions.isTouchWall(pacMan.getIndexPositionX(),(newIndex)/Screen.getTileSize())){
+        switch (gamePanel.getDirection()) {
+            case Consts.UP:
                 pacMan.setImage(Consts.UP);
-                pacMan.setPixelPositionY(newIndex);
-            }
-        }
-        else if (gamePanel.getDirection()==Consts.DOWN) {
-            newIndex = pacMan.getPixelPositionY() + pacMan.getSpeed();
-            if (!Collisions.isTouchWall(pacMan.getIndexPositionX(),(newIndex)/Screen.getTileSize()+1)){
+                if (!Collisions.isTouchWall(pacMan, Consts.UP)) {
+                    pacMan.setPixelPosition(Consts.UP);
+                }
+                break;
+            case Consts.DOWN:
                 pacMan.setImage(Consts.DOWN);
-                pacMan.setPixelPositionY(newIndex);
-            }
-        }
-        else if (gamePanel.getDirection()==Consts.LEFT) {
-            newIndex = pacMan.getPixelPositionX() - pacMan.getSpeed();
-            if (newIndex <= 0)
-                pacMan.setPixelPositionX(Map.getTilesWidth() * Screen.getTileSize()-17);
-            else if (!Collisions.isTouchWall((newIndex)/Screen.getTileSize(),pacMan.getIndexPositionY())){
+                if (!Collisions.isTouchWall(pacMan, Consts.DOWN)) {
+                    pacMan.setPixelPosition(Consts.DOWN);
+                }
+                break;
+            case Consts.LEFT:
                 pacMan.setImage(Consts.LEFT);
-                pacMan.setPixelPositionX(newIndex);
-            }
-        }
-        else if (gamePanel.getDirection()==Consts.RIGHT) {
-            newIndex = pacMan.getPixelPositionX() + pacMan.getSpeed();
-            if (newIndex >= Map.getPixelsWidth()-32)
-                pacMan.setPixelPositionX(0);
-            else if (!Collisions.isTouchWall((newIndex)/Screen.getTileSize()+1,pacMan.getIndexPositionY())){
+                if (pacMan.getPixelPoint().x - pacMan.getSpeed() <= 0)
+                    pacMan.setPixelPosition(Consts.END);
+                else if (!Collisions.isTouchWall(pacMan, Consts.LEFT)) {
+                    pacMan.setPixelPosition(Consts.LEFT);
+                }
+                break;
+            case Consts.RIGHT:
                 pacMan.setImage(Consts.RIGHT);
-                pacMan.setPixelPositionX(newIndex);
-            }
+                if (pacMan.getPixelPoint().x + pacMan.getSpeed() >= Map.getPixelsWidth() - 32)
+                    pacMan.setPixelPosition(Consts.START);
+                else if (!Collisions.isTouchWall(pacMan, Consts.RIGHT)) {
+                    pacMan.setPixelPosition(Consts.RIGHT);
+                }
+                break;
+
         }
     }
 
-    public static void updatePrise(PacMan pacMan) {
+    public static void updatePrise(Element element) {
 
-        Position position = Map.getPositionAt(pacMan.getIndexPositionY(),pacMan.getIndexPositionX());
+        Position position = Map.getPositionAt(element.getIndexPositionY(),element.getIndexPositionX());
 
         if (position.isPrise()) {//pacMan touch
-            pacMan.updateScore(position.getPrise().getScore());
+            element.updateScore(position.getPrise().getScore());
             if (position.getPrise().getType() > 1) {
                 GameLoop.startPriseTimeToPut();
             }
@@ -84,27 +82,31 @@ public class PositionsControl {
             ghosts.get(i).beat();
             if (i == 0) {
                 Ghost ghost = ghosts.get(i);
-                ghost.calculateDirection(new Point(pacMan.getPixelPositionX(), pacMan.getPixelPositionY()));
+                ghost.calculateDirection(new Point(pacMan.getIndexPositionX(), pacMan.getIndexPositionY()));
                 switch (ghost.getDirection()) {
                     case Consts.UP:
                         ghosts.get(i).setPixelPositionY(ghosts.get(i).getPixelPositionY() - ghost.getSpeed());
                         ghost.straitX();
                         ghost.setImage(Consts.UP);
+                        System.out.println("UP");
                         break;
                     case Consts.DOWN:
                         ghosts.get(i).setPixelPositionY(ghosts.get(i).getPixelPositionY() + ghost.getSpeed());
                         ghost.straitX();
                         ghost.setImage(Consts.DOWN);
+                        System.out.println("DOWN");
                         break;
                     case Consts.LEFT:
                         ghosts.get(i).setPixelPositionX(ghosts.get(i).getPixelPositionX() - ghost.getSpeed());
                         ghost.straitY();
                         ghost.setImage(Consts.LEFT);
+                        System.out.println("LEFT");
                         break;
                     case Consts.RIGHT:
                         ghosts.get(i).setPixelPositionX(ghosts.get(i).getPixelPositionX() + ghost.getSpeed());
                         ghost.straitY();
                         ghost.setImage(Consts.RIGHT);
+                        System.out.println("RIGHT");
                         break;
                 }
             }

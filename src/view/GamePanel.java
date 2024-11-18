@@ -108,26 +108,26 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         int keyCode = e.getKeyCode();
 
         switch (keyCode) {
-            case KeyEvent.VK_W:
-                if (!Collisions.isTouchWall(pacMan.getIndexPositionX(), pacMan.getIndexPositionY() - 1)) {
+            case KeyEvent.VK_UP:
+                if (!Collisions.isTouchWall(pacMan.getIndexPoint().x, pacMan.getIndexPoint().y - 1)) {
                     down = left = right = false;
                     up = true;
                 }
                 break;
-            case KeyEvent.VK_S:
-                if (!Collisions.isTouchWall(pacMan.getIndexPositionX(), pacMan.getIndexPositionY() + 1)) {
+            case KeyEvent.VK_DOWN:
+                if (!Collisions.isTouchWall(pacMan.getIndexPoint().x, pacMan.getIndexPoint().y + 1)) {
                     up = left = right = false;
                     down = true;
                 }
                 break;
-            case KeyEvent.VK_A:
-                if (!Collisions.isTouchWall(pacMan.getIndexPositionX() - 1, pacMan.getIndexPositionY())) {
+            case KeyEvent.VK_LEFT:
+                if (!Collisions.isTouchWall(pacMan.getIndexPoint().x - 1, pacMan.getIndexPoint().y)) {
                     up = down = right = false;
                     left = true;
                 }
                 break;
-            case KeyEvent.VK_D:
-                if (!Collisions.isTouchWall(pacMan.getIndexPositionX() + 1, pacMan.getIndexPositionY())) {
+            case KeyEvent.VK_RIGHT:
+                if (!Collisions.isTouchWall(pacMan.getIndexPoint().x + 1, pacMan.getIndexPoint().y)) {
                     up = down = left = false;
                     right = true;
                 }

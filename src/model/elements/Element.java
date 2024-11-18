@@ -8,8 +8,7 @@ import java.awt.*;
 
 public class Element implements ElementInterface{
 
-    protected int pixelPositionX,pixelPositionY,positionSize;
-    protected int indexPositionX,indexPositionY;
+    protected Point pixelPoint,indexPoint;
     protected Image image;
     protected int imageNum = 1;
     protected int score;
@@ -20,22 +19,31 @@ public class Element implements ElementInterface{
     protected String imagesPath;
 
     public Element(int x, int y) {
-        this.pixelPositionX = x * Screen.getTileSize();
-        this.pixelPositionY = y * Screen.getTileSize();
+        this.pixelPoint = new Point(x* Screen.getTileSize(),y* Screen.getTileSize());
     }
 
-    public int getIndexPositionX() {
-        return (this.pixelPositionX + Screen.getTileSize()/2) / Screen.getTileSize() ;
-    }
-    public int getIndexPositionY() {
-        return (this.pixelPositionY + Screen.getTileSize()/2) / Screen.getTileSize();
+    public Point getIndexPoint() {
+        return new Point((this.pixelPoint.x + Screen.getTileSize()/2) / Screen.getTileSize(),(this.pixelPoint.y + Screen.getTileSize()/2) / Screen.getTileSize());
     }
 
-    public int getPixelPositionX() {
-        return pixelPositionX;
+    public Point getPixelPoint() {
+        return pixelPoint;
     }
-    public int getPixelPositionY() {
-        return pixelPositionY;
+
+    public int getPixelPositionX(){
+        return pixelPoint.x;
+    }
+
+    public int getPixelPositionY(){
+        return pixelPoint.y;
+    }
+
+    public int getIndexPositionX(){
+        return getIndexPoint().x;
+    }
+
+    public int getIndexPositionY(){
+        return getIndexPoint().y;
     }
 
     public Image getImage() {
@@ -63,28 +71,47 @@ public class Element implements ElementInterface{
     }
 
     public void setIndexPositionX(int x) {
-        this.indexPositionX = x;
+        this.indexPoint.x = x;
     }
     public void setIndexPositionY(int y) {
-        this.indexPositionY = y;
+        this.indexPoint.y = y;
     }
 
     public void setPixelPositionX(int x) {
-        this.pixelPositionX = x;
+        this.pixelPoint.x = x;
     }
     public void setPixelPositionY(int y) {
-        this.pixelPositionY = y;
+        this.pixelPoint.y = y;
+    }
+
+    public void setPixelPosition(int dir) {
+        switch (dir) {
+            case Consts.UP:
+                this.pixelPoint.y -= this.speed;
+                break;
+            case Consts.DOWN:
+                this.pixelPoint.y += this.speed;
+                break;
+            case Consts.LEFT:
+                this.pixelPoint.x -= this.speed;
+                break;
+            case Consts.RIGHT:
+                this.pixelPoint.x += this.speed;
+                break;
+            case Consts.START:
+                this.pixelPoint.x = 0;
+                break;
+            case Consts.END:
+                this.pixelPoint.x = Screen.getScreenWidth() - Screen.getTileSize();
+                break;
+        }
     }
 
     public void straitX() {
-        this.pixelPositionX = this.getIndexPositionX() * Screen.getTileSize();
+        this.pixelPoint.x= this.getIndexPoint().x * Screen.getTileSize();
     }
     public void straitY() {
-        this.pixelPositionY = this.getIndexPositionY() * Screen.getTileSize();
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
+        this.pixelPoint.y=this.getIndexPoint().y * Screen.getTileSize();
     }
 
     public void setImage(int direction) {
@@ -99,7 +126,6 @@ public class Element implements ElementInterface{
             image = new ImageIcon(imagesPath + "L" + imageNum + ".png").getImage();
         }
         else if (direction == Consts.UP) {
-            System.out.println(imagesPath + "U" + imageNum + ".png");
             image = new ImageIcon(imagesPath + "U" + imageNum + ".png").getImage();
         }
     }
@@ -115,9 +141,6 @@ public class Element implements ElementInterface{
         }
     }
 
-    public void setSize(int size) {
-        this.positionSize = size;
-    }
     public void updateScore(int score) {
         this.score+=score;
     }
@@ -125,5 +148,4 @@ public class Element implements ElementInterface{
     public void upSpeed(){
         this.speed++;
     }
-
 }

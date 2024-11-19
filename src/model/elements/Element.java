@@ -115,10 +115,18 @@ public class Element implements ElementInterface{
                 this.pixelPoint.y += this.speed;
                 break;
             case Consts.LEFT:
-                this.pixelPoint.x -= this.speed;
+                if (pixelPoint.x - this.speed < 0) {
+                    this.pixelPoint.x = Screen.getScreenWidth() - Screen.getTileSize();
+                }
+                else
+                    this.pixelPoint.x -= this.speed;
                 break;
             case Consts.RIGHT:
-                this.pixelPoint.x += this.speed;
+                if (pixelPoint.x + this.speed > Screen.getScreenWidth()) {
+                    this.pixelPoint.x = 0;
+                }
+                else
+                    this.pixelPoint.x += this.speed;
                 break;
             case Consts.START:
                 this.pixelPoint.x = 0;
@@ -141,10 +149,18 @@ public class Element implements ElementInterface{
                 newPosition.y += element.speed;
                 break;
             case Consts.LEFT:
-                newPosition.x -= element.speed;
+                if (newPosition.x - this.speed < 0) {
+                    newPosition.x = Screen.getScreenWidth() - Screen.getTileSize();
+                }
+                else
+                    newPosition.x -= element.speed;
                 break;
             case Consts.RIGHT:
-                newPosition.x += element.speed;
+                if (newPosition.x + this.speed > Screen.getScreenWidth()) {
+                    newPosition.x = 0;
+                }
+                else
+                    newPosition.x += element.speed;
                 break;
             case Consts.START:
                 newPosition.x = 0;

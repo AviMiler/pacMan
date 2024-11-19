@@ -16,6 +16,8 @@ public class GameLoop{
     private static int priseTimeToPut,priseTimeToEnd;
     private static int numOfPrise;
     private static int level;
+    private static int status = 0;
+    private static int statusCnt = 0;
 
     public void startGame() {
 
@@ -52,6 +54,7 @@ public class GameLoop{
                 if (drawDelta >= 1) {
 
                     drawDelta--;
+                    beatStatus();
                     update(gamePanel);
                     GamePanel.setData(pacMan, ghosts);
                     gamePanel.run();
@@ -113,6 +116,21 @@ public class GameLoop{
     }
     public static void removeFromPriseCnt(){
         numOfPrise--;
+    }
+
+    public static int getStatus(){
+        return status;
+    }
+
+    public void beatStatus(){
+        if (statusCnt==0){
+            statusCnt=1000/ GameLoop.getLevel();
+            if (status==1)
+                status=0;
+            else
+                status=1;
+        }
+        statusCnt--;
     }
 
 }

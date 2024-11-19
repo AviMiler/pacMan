@@ -1,6 +1,7 @@
 package model.elements;
 
 import control.Collisions;
+import control.GameLoop;
 import services.Consts;
 import services.DB.Arrays;
 import view.GamePanel;
@@ -12,7 +13,6 @@ import java.awt.*;
 public class Ghost extends Element{
 
     private Point target;
-
     private int direction;
 
     public Ghost(int type){
@@ -41,7 +41,7 @@ public class Ghost extends Element{
 
     public static Arrays<Ghost> initializeGhostList(){
         Arrays<Ghost> ghosts = new Arrays<>();
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 5; i++) {
             ghosts.add(new Ghost(i));
         }
         return ghosts;
@@ -96,14 +96,41 @@ public class Ghost extends Element{
         }
     }
 
-    public void chaseTargetCalculator(PacMan pacMan){
-        switch (this.type){
+    public void chaseTargetCalculator(PacMan pacMan,Ghost blinky){
+        switch (this.type) {
             case Consts.BLINKY:
-                this.target=new Point(pacMan.getPixelPositionX(),pacMan.getPixelPositionY());
+                this.target = new Point(pacMan.getPixelPositionX(), pacMan.getPixelPositionY());
                 break;
             case Consts.INKY:
-                this.target=calculateAmbush(pacMan,4);
+                this.target = calculateAmbush(pacMan, 4);
                 break;
+            case Consts.PINKY:
+                this.target = calculateAmbush(pacMan, 2);
+                this.target.x -= blinky.getPixelPositionX() - this.target.x;
+                this.target.y -= blinky.getPixelPositionY() - this.target.y;
+                break;
+            case Consts.CLYDE:
+                target = blinky.getTarget();
+                if (this.getPixelPoint().distance(pacMan.pixelPoint)<8*Screen.getTileSize()){
+                    target = new Point(0, Screen.getScreenHeight()-2*Screen.getTileSize());
+                }
+
+        }
+    }
+
+    public void scatter () {
+        switch (this.type) {
+            case Consts.BLINKY:
+                this.target = new Point(Screen.getScreenWidth(), 0);
+                break;
+            case Consts.INKY:
+                this.target = new Point(Screen.getScreenWidth(), Screen.getScreenHeight());
+                break;
+            case Consts.PINKY:
+                this.target = new Point(0, 0);
+                break;
+            case Consts.CLYDE:
+                target = new Point(0, Screen.getScreenHeight() - 2 * Screen.getTileSize());
         }
     }
 
@@ -120,5 +147,7 @@ public class Ghost extends Element{
             default -> target;
         };
     }
+
+
 
 }

@@ -45,8 +45,12 @@ public class Printer extends JPanel {
     }
 
     public static void printGhosts(Arrays<Ghost> ghosts,Graphics2D g) {
+        Arrays<Color> c = new Arrays<>();
+        c.add(Color.RED);c.add(Color.CYAN);c.add(Color.PINK);c.add(Color.ORANGE);
         for (int i = 0; i < ghosts.size(); i++) {
-
+            g.setColor(c.get(i));
+            g.setFont(g.getFont().deriveFont(24f));
+            g.drawString("X",ghosts.get(i).getTarget().x,ghosts.get(i).getTarget().y + m);
             g.drawImage(ghosts.get(i).getImage(), ghosts.get(i).getPixelPositionX(), ghosts.get(i).getPixelPositionY() + m, Screen.getTileSize(), Screen.getTileSize(), null);
         }
     }

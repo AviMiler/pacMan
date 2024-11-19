@@ -84,7 +84,10 @@ public class PositionsControl {
         for (int i = 0; i < ghosts.size(); i++) {
             Ghost ghost = ghosts.get(i);
             ghost.beat();
-            ghost.chaseTargetCalculator(pacMan);
+            if (GameLoop.getStatus()==0)
+                ghost.chaseTargetCalculator(pacMan,ghosts.get(0));
+            else
+                ghost.scatter();
             ghost.calculateDirection(ghost.getTarget());
             ghost.setPixelPosition(ghost.getDirection());
             ghost.strait();

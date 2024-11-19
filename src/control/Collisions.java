@@ -13,20 +13,20 @@ import java.awt.*;
 
 public class Collisions {
 
-    public static boolean isTouchWall(int x, int y) {
+    public static boolean isIndexTouchWall(int x, int y) {
         return Map.getMap().get(y).get(x).isWall();
     }
 
     public static boolean isTouchWall(Element element, int dir) {
         return switch (dir) {
-            case Consts.UP ->
-                    Map.getMap().get((element.getPixelPositionY() - element.getSpeed()) / Screen.getTileSize()).get(element.getIndexPositionX()).isWall();
-            case Consts.DOWN ->
-                    Map.getMap().get((element.getPixelPositionY() + element.getSpeed()) / Screen.getTileSize() + 1).get(element.getIndexPositionX()).isWall();
-            case Consts.LEFT ->
-                    Map.getMap().get(element.getIndexPositionY()).get((element.getPixelPositionX() - element.getSpeed()) / Screen.getTileSize()).isWall();
-            case Consts.RIGHT ->
-                    Map.getMap().get(element.getIndexPositionY()).get((element.getPixelPositionX() + element.getSpeed()) / Screen.getTileSize() + 1).isWall();
+            case Consts.UP -> isIndexTouchWall(element.getIndexPositionX(),(element.getMiddlePixelY()-Screen.getHalfTileSize())/Screen.getTileSize());
+
+            case Consts.DOWN -> isIndexTouchWall(element.getIndexPositionX(),(element.getMiddlePixelY()+Screen.getHalfTileSize())/Screen.getTileSize());
+
+            case Consts.LEFT -> isIndexTouchWall((element.getMiddlePixelX()-Screen.getHalfTileSize())/Screen.getTileSize(), element.getIndexPositionY());
+
+            case Consts.RIGHT -> isIndexTouchWall((element.getMiddlePixelX()+Screen.getHalfTileSize())/Screen.getTileSize(), element.getIndexPositionY());
+
             default -> false;
         };
     }

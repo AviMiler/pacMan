@@ -15,15 +15,16 @@ public class Element implements ElementInterface{
     protected int speed;
     protected int type;
     protected int size;
+    protected int collisionMargin;
     protected int beat;
     protected String imagesPath;
 
     public Element(int x, int y) {
-        this.pixelPoint = new Point(x* Screen.getTileSize(),y* Screen.getTileSize());
+        this.pixelPoint = new Point(x * Screen.getTileSize() ,y * Screen.getTileSize());
     }
 
     public Point getIndexPoint() {
-        return new Point((this.pixelPoint.x + Screen.getTileSize()/2) / Screen.getTileSize(),(this.pixelPoint.y + Screen.getTileSize()/2) / Screen.getTileSize());
+        return new Point((this.pixelPoint.x + Screen.getTileSize()/2+1) / Screen.getTileSize(),(this.pixelPoint.y + Screen.getTileSize()/2+1)/ Screen.getTileSize());
     }
 
     public Point getPixelPoint() {
@@ -36,6 +37,17 @@ public class Element implements ElementInterface{
 
     public int getPixelPositionY(){
         return pixelPoint.y;
+    }
+
+    public int getMiddlePixelX(){
+        return pixelPoint.x  + (Screen.getTileSize()/2);
+    }
+    public int getMiddlePixelY(){
+        return pixelPoint.y  + (Screen.getTileSize()/2);
+    }
+
+    public int getCollisionMargin() {
+        return collisionMargin;
     }
 
     public int getIndexPositionX(){
@@ -85,6 +97,7 @@ public class Element implements ElementInterface{
     }
 
     public void setPixelPosition(int dir) {
+
         switch (dir) {
             case Consts.UP:
                 this.pixelPoint.y -= this.speed;
@@ -105,6 +118,33 @@ public class Element implements ElementInterface{
                 this.pixelPoint.x = Screen.getScreenWidth() - Screen.getTileSize();
                 break;
         }
+    }
+
+    public Point setPixelPosition(Element element , int dir) {
+
+        Point newPosition = new Point(this.getPixelPositionX(),this.getPixelPositionY());
+
+        switch (dir) {
+            case Consts.UP:
+                newPosition.y -= element.speed;
+                break;
+            case Consts.DOWN:
+                newPosition.y += element.speed;
+                break;
+            case Consts.LEFT:
+                newPosition.x -= element.speed;
+                break;
+            case Consts.RIGHT:
+                newPosition.x += element.speed;
+                break;
+            case Consts.START:
+                newPosition.x = 0;
+                break;
+            case Consts.END:
+                newPosition.x = Screen.getScreenWidth() - Screen.getTileSize();
+                break;
+        }
+        return newPosition;
     }
 
     public void straitX() {

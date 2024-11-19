@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class PositionsControl {
 
-    public static void updatePacMan(PacMan pacMan,GamePanel gamePanel) {
+    public static void updatePacMan(PacMan pacMan, GamePanel gamePanel) {
 
         pacMan.beat();
 
@@ -51,7 +51,7 @@ public class PositionsControl {
 
     public static void updatePrise(Element element) {
 
-        Position position = Map.getPositionAt(element.getIndexPositionY(),element.getIndexPositionX());
+        Position position = Map.getPositionAt(element.getIndexPositionY(), element.getIndexPositionX());
 
         if (position.isPrise()) {//pacMan touch
             element.updateScore(position.getPrise().getScore());
@@ -62,53 +62,48 @@ public class PositionsControl {
                 GameLoop.removeFromPriseCnt();
             position.deletePrise();
         }
-        if (GameLoop.getPriseTimeToPut()==0){
+        if (GameLoop.getPriseTimeToPut() == 0) {
             if (!Map.getPrisePosition().isSpacialPrise()) {
                 Map.putPrise();
                 GameLoop.startPriseTimeToEnd();
-            }
-            else
+            } else
                 GameLoop.startPriseTimeToPut();
         }
-        if (GameLoop.getPriseTimeToEnd()==0) {
+        if (GameLoop.getPriseTimeToEnd() == 0) {
             Map.deletePrise();
             GameLoop.startPriseTimeToPut();
         }
     }
 
-    public static void updateGhosts(Arrays<Ghost> ghosts,PacMan pacMan) {
+    public static void updateGhosts(Arrays<Ghost> ghosts, PacMan pacMan) {
 
         for (int i = 0; i < ghosts.size(); i++) {
-            ghosts.get(i).beat();
+            Ghost ghost = ghosts.get(i);
+            ghost.beat();
             if (i == 0) {
-                Ghost ghost = ghosts.get(i);
-                ghost.calculateDirection(new Point(pacMan.getIndexPositionX(), pacMan.getIndexPositionY()));
-                switch (ghost.getDirection()) {
-                    case Consts.UP:
-                        ghosts.get(i).setPixelPositionY(ghosts.get(i).getPixelPositionY() - ghost.getSpeed());
-                        ghost.straitX();
-                        ghost.setImage(Consts.UP);
-                        System.out.println("UP");
-                        break;
-                    case Consts.DOWN:
-                        ghosts.get(i).setPixelPositionY(ghosts.get(i).getPixelPositionY() + ghost.getSpeed());
-                        ghost.straitX();
-                        ghost.setImage(Consts.DOWN);
-                        System.out.println("DOWN");
-                        break;
-                    case Consts.LEFT:
-                        ghosts.get(i).setPixelPositionX(ghosts.get(i).getPixelPositionX() - ghost.getSpeed());
-                        ghost.straitY();
-                        ghost.setImage(Consts.LEFT);
-                        System.out.println("LEFT");
-                        break;
-                    case Consts.RIGHT:
-                        ghosts.get(i).setPixelPositionX(ghosts.get(i).getPixelPositionX() + ghost.getSpeed());
-                        ghost.straitY();
-                        ghost.setImage(Consts.RIGHT);
-                        System.out.println("RIGHT");
-                        break;
-                }
+                ghost.calculateDirection(new Point(pacMan.getIndexPositionX()*Screen.getTileSize(), pacMan.getIndexPositionY()*Screen.getTileSize()));
+            }
+            switch (ghost.getDirection()) {
+                case Consts.UP:
+                    ghost.setPixelPosition(Consts.UP);
+                    ghost.straitX();
+                    ghost.setImage(Consts.UP);
+                    break;
+                case Consts.DOWN:
+                    ghost.setPixelPosition(Consts.DOWN);
+                    ghost.straitX();
+                    ghost.setImage(Consts.DOWN);
+                    break;
+                case Consts.LEFT:
+                    ghost.setPixelPosition(Consts.LEFT);
+                    ghost.straitY();
+                    ghost.setImage(Consts.LEFT);
+                    break;
+                case Consts.RIGHT:
+                    ghost.setPixelPosition(Consts.RIGHT);
+                    ghost.straitY();
+                    ghost.setImage(Consts.RIGHT);
+                    break;
             }
         }
     }

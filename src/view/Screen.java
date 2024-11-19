@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class Screen {
 
-    private static final int originalTileSize = 14;
-    private static final int scale = 2;
+    private static final int originalTileSize = 29;
+    private static final int scale = 1;
     private static int maxRow = Map.getTilesHeight();
     private static int maxCol = Map.getTilesWidth();
     public static Font customFont;
@@ -32,6 +32,10 @@ public class Screen {
 
     public static int getTileSize(){
         return originalTileSize * scale;
+    }
+
+    public static int getHalfTileSize(){
+        return getTileSize()/2;
     }
 
     public static int getScreenWidth() {

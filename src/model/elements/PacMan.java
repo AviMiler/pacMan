@@ -11,14 +11,15 @@ public class PacMan extends Element {
     private int life;
 
     public PacMan() {
-        super(Map.getPMStartX(), Map.getPMStartY());
+        super(0,0);
 
-        speed = 4;
+        speed = 3;
         life = 3;
         imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\pacMan\\";
         image = new ImageIcon(imagesPath + 0 + ".png").getImage();
         score = 0;
         beat = 0;
+        collisionMargin = 0;
 
     }
 
@@ -30,11 +31,9 @@ public class PacMan extends Element {
         life++;
     }
 
-    public void setPosition(){
-        this.setPixelPositionY(Map.getPMStartY()*Screen.getTileSize());
-        this.setPixelPositionX(Map.getPMStartX()*Screen.getTileSize());
-        this.getPixelPoint().x=Map.getPMStartX()*Screen.getTileSize();
-        this.getPixelPoint().y=Map.getPMStartY()*Screen.getTileSize();
+    public void setPosition() {
+        this.setPixelPositionY(Map.getIndexPMStartY() * Screen.getTileSize());
+        this.setPixelPositionX(Map.getIndexPMStartX() * Screen.getTileSize());
     }
 
     public void removeLife() {

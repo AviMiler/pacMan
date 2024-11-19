@@ -9,7 +9,7 @@ import view.Screen;
 import javax.swing.*;
 import java.awt.*;
 
-public class Ghost extends Element implements ElementInterface {
+public class Ghost extends Element{
 
     private Point target;
 
@@ -23,6 +23,7 @@ public class Ghost extends Element implements ElementInterface {
         this.speed=1;
         this.target=new Point(0,0);
         this.direction=0;
+        collisionMargin = Screen.getTileSize()/2;
 
     }
 
@@ -44,54 +45,37 @@ public class Ghost extends Element implements ElementInterface {
 
     public void calculateDirection(Point target) {
 
-        Point nextPosition = new Point(this.getPixelPositionX(), this.getPixelPositionY());
+        Arrays<Integer> possibleDirections = possibleDirections();
+        Point nextPosition1;
         Point nextPosition2;
-        int oldDirection = direction, newIndex;
-        this.direction = 0;
 
-        //set as up
-        if (oldDirection != Consts.DOWN) {
-            newIndex = this.getPixelPositionY() - this.getSpeed();
-            if (!Collisions.isTouchWall(this, Consts.UP)) {
-                nextPosition = new Point(this.getPixelPositionX(), newIndex);
-                this.direction = Consts.UP;
-            }
-        }
-        //check if left is shorter
-        if (oldDirection != Consts.RIGHT) {
-            newIndex = this.getPixelPositionX() - this.getSpeed();
-            if (!Collisions.isTouchWall(this, Consts.LEFT)) {
-                nextPosition2 = new Point(newIndex, this.getPixelPositionY());
-                if (checkIfBCloserThenA(nextPosition, nextPosition2, target)) {
-                    nextPosition = nextPosition2;
-                    this.direction = Consts.LEFT;
+        if (possibleDirections.size()>0) {
+            nextPosition1 = setPixelPosition(this, possibleDirections.get(0));
+            this.direction = possibleDirections.get(0);
+            System.out.println();
+            for (int i = 1; i < possibleDirections.size(); i++) {
+                nextPosition2 = setPixelPosition(this, possibleDirections.get(i));
+                if (checkIfBCloserThenA(nextPosition1, nextPosition2, target)) {
+                    nextPosition1.x = nextPosition2.x;
+                    nextPosition1.y = nextPosition2.y;
+                    this.direction = possibleDirections.get(i);
                 }
             }
-        }
-        //check if down shorter
-        if (oldDirection != Consts.UP) {
-            newIndex = this.getPixelPositionY() + this.getSpeed();
-            if (!Collisions.isTouchWall(this, Consts.DOWN)) {
-                nextPosition2 = new Point(this.getPixelPositionX(), newIndex);
-                if (checkIfBCloserThenA(nextPosition, nextPosition2, target)) {
-                    nextPosition = nextPosition2;
-                    this.direction = Consts.DOWN;
-                }
-            }
-        }
-
-        //check if right sorter
-        if (oldDirection != Consts.LEFT) {
-            newIndex = this.getPixelPositionX() + this.getSpeed();
-            if (!Collisions.isTouchWall(this, Consts.RIGHT)) {
-                nextPosition2 = new Point(newIndex, this.getIndexPositionY());
-                if (checkIfBCloserThenA(nextPosition, nextPosition2, target)) {
-                    this.direction = Consts.RIGHT;
-                }
-            }
+            System.out.println(this.direction);
         }
     }
 
+    private Arrays<Integer> possibleDirections(){
+        final Arrays<Integer> possibleDirections = new Arrays<>();
+        for (int i = 4; i > 0; i--) {
+            if (this.direction+2 != i && this.direction - 2!= i){
+                if (!Collisions.isTouchWall(this,i))
+                    possibleDirections.add(i);
+            }
+        }
+        this.direction=0;
+        return possibleDirections;
+    }
 
     private boolean checkIfBCloserThenA(Point positionA, Point positionB,Point target){
         return positionA.distance(target)>positionB.distance(target);

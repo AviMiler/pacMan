@@ -55,10 +55,10 @@ public class Map {
         return map.size();
     }
 
-    public static int getPMStartX(){
+    public static int getIndexPMStartX(){
         return map.get(0).size()/2;
     }
-    public static int getPMStartY(){
+    public static int getIndexPMStartY(){
         return map.size()-2;
     }
 

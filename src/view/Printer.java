@@ -46,8 +46,8 @@ public class Printer extends JPanel {
 
     public static void printGhosts(Arrays<Ghost> ghosts,Graphics2D g) {
         for (int i = 0; i < ghosts.size(); i++) {
-            if (i==0)
-                g.drawImage(ghosts.get(i).getImage(),ghosts.get(i).getPixelPositionX(), ghosts.get(i).getPixelPositionY() + m, Screen.getTileSize(),Screen.getTileSize(), null);
+
+            g.drawImage(ghosts.get(i).getImage(), ghosts.get(i).getPixelPositionX(), ghosts.get(i).getPixelPositionY() + m, Screen.getTileSize(), Screen.getTileSize(), null);
         }
     }
 

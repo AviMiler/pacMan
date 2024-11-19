@@ -39,7 +39,4 @@ public class PacMan extends Element {
     public void removeLife() {
         life--;
     }
-
-
-
 }

@@ -18,6 +18,7 @@ public class Element implements ElementInterface{
     protected int collisionMargin;
     protected int beat;
     protected String imagesPath;
+    protected int direction;
 
     public Element(int x, int y) {
         this.pixelPoint = new Point(x * Screen.getTileSize() ,y * Screen.getTileSize());
@@ -94,6 +95,14 @@ public class Element implements ElementInterface{
     }
     public void setPixelPositionY(int y) {
         this.pixelPoint.y = y;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 
     public void setPixelPosition(int dir) {

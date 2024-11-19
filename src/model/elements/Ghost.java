@@ -1,9 +1,9 @@
 package model.elements;
 
 import control.Collisions;
-import model.Map;
 import services.Consts;
 import services.DB.Arrays;
+import view.GamePanel;
 import view.Screen;
 
 import javax.swing.*;
@@ -31,13 +31,17 @@ public class Ghost extends Element{
         return target;
     }
 
+    public void setTarget(Point target){
+        this.target=target;
+    }
+
     public int getDirection(){
         return direction;
     }
 
     public static Arrays<Ghost> initializeGhostList(){
         Arrays<Ghost> ghosts = new Arrays<>();
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             ghosts.add(new Ghost(i));
         }
         return ghosts;
@@ -91,4 +95,30 @@ public class Ghost extends Element{
             this.straitX();
         }
     }
+
+    public void chaseTargetCalculator(PacMan pacMan){
+        switch (this.type){
+            case Consts.BLINKY:
+                this.target=new Point(pacMan.getPixelPositionX(),pacMan.getPixelPositionY());
+                break;
+            case Consts.INKY:
+                this.target=calculateAmbush(pacMan,4);
+                break;
+        }
+    }
+
+    private Point calculateAmbush(PacMan pacMan,int distance){
+       return switch (pacMan.getDirection()) {
+            case Consts.RIGHT ->
+                    new Point(pacMan.getPixelPositionX() + distance * Screen.getTileSize(), pacMan.getPixelPositionY());
+            case Consts.LEFT ->
+                    new Point(pacMan.getPixelPositionX() - distance * Screen.getTileSize(), pacMan.getPixelPositionY());
+            case Consts.UP ->
+                    new Point(pacMan.getPixelPositionX() - distance * Screen.getTileSize(), pacMan.getPixelPositionY() - distance * Screen.getTileSize());
+            case Consts.DOWN ->
+                    new Point(pacMan.getPixelPositionX(), pacMan.getPixelPositionY() + distance * Screen.getTileSize());
+            default -> target;
+        };
+    }
+
 }

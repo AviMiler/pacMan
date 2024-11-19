@@ -19,18 +19,21 @@ public class PositionsControl {
         switch (gamePanel.getDirection()) {
             case Consts.UP:
                 pacMan.setImage(Consts.UP);
+                pacMan.setDirection(Consts.UP);
                 if (!Collisions.isTouchWall(pacMan, Consts.UP)) {
                     pacMan.setPixelPosition(Consts.UP);
                 }
                 break;
             case Consts.DOWN:
                 pacMan.setImage(Consts.DOWN);
+                pacMan.setDirection(Consts.DOWN);
                 if (!Collisions.isTouchWall(pacMan, Consts.DOWN)) {
                     pacMan.setPixelPosition(Consts.DOWN);
                 }
                 break;
             case Consts.LEFT:
                 pacMan.setImage(Consts.LEFT);
+                pacMan.setDirection(Consts.LEFT);
                 if (pacMan.getPixelPoint().x - pacMan.getSpeed() <= 0)
                     pacMan.setPixelPosition(Consts.END);
                 else if (!Collisions.isTouchWall(pacMan, Consts.LEFT)) {
@@ -39,6 +42,7 @@ public class PositionsControl {
                 break;
             case Consts.RIGHT:
                 pacMan.setImage(Consts.RIGHT);
+                pacMan.setDirection(Consts.RIGHT);
                 if (pacMan.getPixelPoint().x + pacMan.getSpeed() >= Map.getPixelsWidth() - 32)
                     pacMan.setPixelPosition(Consts.START);
                 else if (!Collisions.isTouchWall(pacMan, Consts.RIGHT)) {
@@ -80,27 +84,9 @@ public class PositionsControl {
         for (int i = 0; i < ghosts.size(); i++) {
             Ghost ghost = ghosts.get(i);
             ghost.beat();
-            if (i == 0) {
-                ghost.calculateDirection(new Point(pacMan.getIndexPositionX()*Screen.getTileSize(), pacMan.getIndexPositionY()*Screen.getTileSize()));
-            }
-            switch (ghost.getDirection()) {
-                case Consts.UP:
-                    ghost.setPixelPosition(Consts.UP);
-                    ghost.setImage(Consts.UP);
-                    break;
-                case Consts.DOWN:
-                    ghost.setPixelPosition(Consts.DOWN);
-                    ghost.setImage(Consts.DOWN);
-                    break;
-                case Consts.LEFT:
-                    ghost.setPixelPosition(Consts.LEFT);
-                    ghost.setImage(Consts.LEFT);
-                    break;
-                case Consts.RIGHT:
-                    ghost.setPixelPosition(Consts.RIGHT);
-                    ghost.setImage(Consts.RIGHT);
-                    break;
-            }
+            ghost.chaseTargetCalculator(pacMan);
+            ghost.calculateDirection(ghost.getTarget());
+            ghost.setPixelPosition(ghost.getDirection());
             ghost.strait();
         }
     }

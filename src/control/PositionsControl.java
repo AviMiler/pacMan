@@ -86,25 +86,22 @@ public class PositionsControl {
             switch (ghost.getDirection()) {
                 case Consts.UP:
                     ghost.setPixelPosition(Consts.UP);
-                    ghost.straitX();
                     ghost.setImage(Consts.UP);
                     break;
                 case Consts.DOWN:
                     ghost.setPixelPosition(Consts.DOWN);
-                    ghost.straitX();
                     ghost.setImage(Consts.DOWN);
                     break;
                 case Consts.LEFT:
                     ghost.setPixelPosition(Consts.LEFT);
-                    ghost.straitY();
                     ghost.setImage(Consts.LEFT);
                     break;
                 case Consts.RIGHT:
                     ghost.setPixelPosition(Consts.RIGHT);
-                    ghost.straitY();
                     ghost.setImage(Consts.RIGHT);
                     break;
             }
+            ghost.strait();
         }
     }
 }

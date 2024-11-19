@@ -17,6 +17,20 @@ public class Collisions {
         return Map.getMap().get(y).get(x).isWall();
     }
 
+    public static boolean isIndexTouchWall(Element element, int dir) {
+        return switch (dir) {
+            case Consts.UP -> isIndexTouchWall(element.getIndexPositionX(), element.getIndexPositionY() - 1);
+
+            case Consts.DOWN -> isIndexTouchWall(element.getIndexPositionX(), element.getIndexPositionY() + 1);
+
+            case Consts.LEFT -> isIndexTouchWall(element.getIndexPositionX() - 1, element.getIndexPositionY());
+
+            case Consts.RIGHT -> isIndexTouchWall(element.getIndexPositionX() + 1, element.getIndexPositionY());
+
+            default -> false;
+        };
+    }
+
     public static boolean isTouchWall(Element element, int dir) {
         return switch (dir) {
             case Consts.UP -> isIndexTouchWall(element.getIndexPositionX(),(element.getMiddlePixelY()-Screen.getHalfTileSize())/Screen.getTileSize());

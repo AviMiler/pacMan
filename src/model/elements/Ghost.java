@@ -52,7 +52,7 @@ public class Ghost extends Element{
         if (possibleDirections.size()>0) {
             nextPosition1 = setPixelPosition(this, possibleDirections.get(0));
             this.direction = possibleDirections.get(0);
-            System.out.println();
+
             for (int i = 1; i < possibleDirections.size(); i++) {
                 nextPosition2 = setPixelPosition(this, possibleDirections.get(i));
                 if (checkIfBCloserThenA(nextPosition1, nextPosition2, target)) {
@@ -61,7 +61,6 @@ public class Ghost extends Element{
                     this.direction = possibleDirections.get(i);
                 }
             }
-            System.out.println(this.direction);
         }
     }
 
@@ -69,15 +68,27 @@ public class Ghost extends Element{
         final Arrays<Integer> possibleDirections = new Arrays<>();
         for (int i = 4; i > 0; i--) {
             if (this.direction+2 != i && this.direction - 2!= i){
-                if (!Collisions.isTouchWall(this,i))
+                if (!Collisions.isIndexTouchWall(this,i) && isInJunction())
                     possibleDirections.add(i);
             }
         }
-        this.direction=0;
         return possibleDirections;
     }
 
     private boolean checkIfBCloserThenA(Point positionA, Point positionB,Point target){
         return positionA.distance(target)>positionB.distance(target);
+    }
+
+    private boolean isInJunction() {
+        return this.pixelPoint.x % Screen.getTileSize() == 0 && this.pixelPoint.y % Screen.getTileSize() == 0;
+    }
+
+    public void strait(){
+        if (this.direction==Consts.RIGHT || this.direction==Consts.LEFT){
+            this.straitY();
+        }
+        if (this.direction==Consts.UP || this.direction==Consts.DOWN){
+            this.straitX();
+        }
     }
 }

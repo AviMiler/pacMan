@@ -2,9 +2,7 @@ package control;
 
 import model.elements.Ghost;
 import model.elements.PacMan;
-import model.elements.Position;
-import model.elements.Prise;
-import services.*;
+import services.Consts;
 import services.DB.Arrays;
 import view.*;
 import model.*;
@@ -14,10 +12,12 @@ public class GameLoop{
     private PacMan pacMan;
     private Arrays<Ghost> ghosts;
     private static int priseTimeToPut,priseTimeToEnd;
+    private static int chaseTimer,scatterTimer,frightenTimer;
     private static int numOfPrise;
     private static int level;
     private static int status = 0;
     private static int statusCnt = 0;
+    private static int gameOverCnt = 3;
 
     public void startGame() {
 
@@ -35,12 +35,13 @@ public class GameLoop{
         boolean endLevel = false;
         pacMan = new PacMan();
 
-        for (level = 1; level < 4;level++) {
+        for (level = 1; level < 4 && gameOverCnt> 0;level++) {
 
             pacMan.setPosition();
             ghosts = Ghost.initializeGhostList();
             Map.putPrise();
             startPriseTimeToEnd();
+            startChaseTimer();
 
             while (gamePanel.getGameThread() != null && !endLevel) {
 
@@ -54,7 +55,6 @@ public class GameLoop{
                 if (drawDelta >= 1) {
 
                     drawDelta--;
-                    beatStatus();
                     update(gamePanel);
                     GamePanel.setData(pacMan, ghosts);
                     gamePanel.run();
@@ -68,13 +68,14 @@ public class GameLoop{
             endLevel=false;
 
         }
-        gamePanel.endGame();
+        if (gameOverCnt>0)
+            gamePanel.endGame();
     }
 
     private void update(GamePanel gamePanel) {
 
         updateTimes();
-        PositionsControl.updatePrise(pacMan);
+        PositionsControl.updatePrise(pacMan,ghosts);
         PositionsControl.updatePacMan(pacMan, gamePanel);
         PositionsControl.updateGhosts(ghosts,pacMan);
 
@@ -98,12 +99,57 @@ public class GameLoop{
         return priseTimeToEnd;
     }
 
+    public static void startFrightenTimer() {
+        frightenTimer = 500/level;
+        scatterTimer=-1;
+        chaseTimer=-1;
+    }
+
+    public static void startChaseTimer() {
+        chaseTimer=500 * level;
+        frightenTimer = -1;
+        scatterTimer=-1;
+    }
+
+    public static void startScatterTimer() {
+        scatterTimer=500;
+        chaseTimer=-1;
+        frightenTimer=-1;
+    }
+
+    public static int getGhostMode(){
+        if (scatterTimer>=0) {
+            return Consts.SCATTER;
+        }
+        else if (chaseTimer>=0) {
+            return Consts.CHASE;
+        }
+        else if (frightenTimer>=0)
+            return Consts.FRIGHTENED;
+        return 0;
+    }
+
     private void updateTimes() {
 
         if (priseTimeToEnd > 0)
             priseTimeToEnd--;
         if (priseTimeToPut > 0)
             priseTimeToPut--;
+        if (frightenTimer > 0)
+            frightenTimer--;
+        if (scatterTimer > 0)
+            scatterTimer--;
+        if (chaseTimer > 0)
+            chaseTimer--;
+        if (frightenTimer == 0){
+            startChaseTimer();
+        }
+        if (chaseTimer == 0){
+            startScatterTimer();
+        }
+        if (scatterTimer == 0){
+            startChaseTimer();
+        }
 
     }
 
@@ -117,20 +163,4 @@ public class GameLoop{
     public static void removeFromPriseCnt(){
         numOfPrise--;
     }
-
-    public static int getStatus(){
-        return status;
-    }
-
-    public void beatStatus(){
-        if (statusCnt==0){
-            statusCnt=1000/ GameLoop.getLevel();
-            if (status==1)
-                status=0;
-            else
-                status=1;
-        }
-        statusCnt--;
-    }
-
 }

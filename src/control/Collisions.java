@@ -14,6 +14,8 @@ import java.awt.*;
 public class Collisions {
 
     public static boolean isIndexTouchWall(int x, int y) {
+        if (x==-1 || x >= Map.getMap().size())
+            return false;
         return Map.getMap().get(y).get(x).isWall();
     }
 

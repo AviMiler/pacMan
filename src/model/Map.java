@@ -145,10 +145,6 @@ public class Map {
         }
     }
 
-    public static int indexer(int n){
-        return n / Screen.getTileSize();
-    }
-
     private static Arrays<Integer> convertStringsToInts(String s){
         String[] arr = s.split(" ");
         Arrays<Integer> ints = new Arrays<>();

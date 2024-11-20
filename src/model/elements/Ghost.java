@@ -2,50 +2,110 @@ package model.elements;
 
 import control.Collisions;
 import control.GameLoop;
+import model.Map;
 import services.Consts;
 import services.DB.Arrays;
-import view.GamePanel;
+import services.Services;
 import view.Screen;
 
-import javax.swing.*;
 import java.awt.*;
 
-public class Ghost extends Element{
+public class Ghost extends Element {
 
     private Point target;
     private int direction;
+    public boolean eatable;
 
-    public Ghost(int type){
-        super(9+type,8);
-        this.type=type;
-        imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\ghosts\\"+type+"\\";
-        image = new ImageIcon( imagesPath+0 + ".png").getImage();
-        this.speed=1;
-        this.target=new Point(0,0);
-        this.direction=0;
-        collisionMargin = Screen.getTileSize()/2;
+    //////////////////////////////constructors//////////////////////////////
+
+    public Ghost(int type) {
+        super(9 + type, 8);
+        this.type = type;
+        pictureType = type;
+        imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\ghosts\\";
+        setImage(0);
+        this.speed = 1;
+        this.eatable = false;
+        this.target = new Point(0, 0);
+        this.direction = 0;
+        this.collisionMargin = Screen.getTileSize() / 2;
 
     }
 
-    public Point getTarget(){
-        return target;
-    }
-
-    public void setTarget(Point target){
-        this.target=target;
-    }
-
-    public int getDirection(){
-        return direction;
-    }
-
-    public static Arrays<Ghost> initializeGhostList(){
+    public static Arrays<Ghost> initializeGhostList() {
         Arrays<Ghost> ghosts = new Arrays<>();
         for (int i = 1; i < 5; i++) {
             ghosts.add(new Ghost(i));
         }
         return ghosts;
     }
+
+    //////////////////////////////getters//////////////////////////////
+
+    public Point getTarget() {
+        return target;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public boolean isEatable() {
+        return eatable;
+    }
+
+    //////////////////////////////setters//////////////////////////////
+
+    public void setToFrightenMode() {
+        imageNum = 1;
+        if (direction == 2)
+            direction = 4;
+        else if (direction == 1)
+            direction = 3;
+        else if (direction == 3)
+            direction = 1;
+        else if (direction == 4)
+            direction = 2;
+        state = Consts.FRIGHTENED;
+        pictureType = Consts.FRIGHTENED;
+    }
+
+    public void setModeFromGameLoop(int mode){
+        switch (mode) {
+            case Consts.FRIGHTENED:
+                if (state!=Consts.FRIGHTENED)
+                    setToFrightenMode();
+                break;
+            case Consts.CHASE:
+                if (state!=Consts.CHASE)
+                    setToChaseMode();
+                break;
+            case Consts.SCATTER:
+                if (state!=Consts.SCATTER)
+                    setToScatterMode();
+                break;
+        }
+    }
+
+    public void setToChaseMode() {
+        imageNum = 1;
+        pictureType = type;
+        state = Consts.CHASE;
+    }
+
+    public void setToScatterMode() {
+        imageNum = 1;
+        pictureType = type;
+        state = Consts.SCATTER;
+    }
+    
+    public void setToEatenMode(){
+        pictureType=Consts.EATEN;
+        state=Consts.EATEN;
+        imageNum=3;
+    }
+
+                //////////////////////////////direction calculator//////////////////////////////
 
     public void calculateDirection(Point target) {
 
@@ -96,6 +156,25 @@ public class Ghost extends Element{
         }
     }
 
+
+                //////////////////////////////targets calculator//////////////////////////////
+
+    public void targetCalculator(PacMan pacMan,Ghost ghost) {
+        switch (state) {
+            case Consts.CHASE:
+                chaseTargetCalculator(pacMan, ghost);
+                break;
+            case Consts.FRIGHTENED:
+                frightenedTargetCalculator();
+                break;
+            case Consts.SCATTER:
+                scatterTargetCalculator();
+                break;
+            case Consts.EATEN:
+                eatenTargetCalculator();
+        }
+    }
+
     public void chaseTargetCalculator(PacMan pacMan,Ghost blinky){
         switch (this.type) {
             case Consts.BLINKY:
@@ -118,20 +197,30 @@ public class Ghost extends Element{
         }
     }
 
-    public void scatter () {
+    public void scatterTargetCalculator () {
         switch (this.type) {
             case Consts.BLINKY:
-                this.target = new Point(Screen.getScreenWidth(), 0);
+                this.target = new Point(Screen.getScreenWidth()-Screen.getTileSize(), Screen.getTileSize());
                 break;
             case Consts.INKY:
-                this.target = new Point(Screen.getScreenWidth(), Screen.getScreenHeight());
+                this.target = new Point(Screen.getScreenWidth()-Screen.getTileSize(), Screen.getScreenHeight()-2*Screen.getTileSize());
                 break;
             case Consts.PINKY:
-                this.target = new Point(0, 0);
+                this.target = new Point(0, Screen.getTileSize());
                 break;
             case Consts.CLYDE:
                 target = new Point(0, Screen.getScreenHeight() - 2 * Screen.getTileSize());
         }
+    }
+
+    private void frightenedTargetCalculator(){
+        target.x=Services.getRandomInt(0,Screen.getScreenWidth());
+        target.y=Services.getRandomInt(0,Screen.getScreenHeight());
+    }
+
+    private void eatenTargetCalculator(){
+        target.x= Map.getGhostsStartX();
+        target.y=Map.getIndexPMStartY();
     }
 
     private Point calculateAmbush(PacMan pacMan,int distance){
@@ -147,7 +236,5 @@ public class Ghost extends Element{
             default -> target;
         };
     }
-
-
-
+    
 }

@@ -11,12 +11,15 @@ public class PacMan extends Element {
     private int life;
 
     public PacMan() {
-        super(0,0);
+        super(0, 0);
 
         speed = 3;
+        type = 1;
+        pictureType = type;
+        state = 0;
         life = 3;
         imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\pacMan\\";
-        image = new ImageIcon(imagesPath + 0 + ".png").getImage();
+        setImage(0);
         score = 0;
         beat = 0;
         collisionMargin = 0;

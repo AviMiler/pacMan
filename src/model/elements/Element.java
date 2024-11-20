@@ -14,6 +14,8 @@ public class Element implements ElementInterface{
     protected int score;
     protected int speed;
     protected int type;
+    protected int pictureType;
+    protected int state;
     protected int size;
     protected int collisionMargin;
     protected int beat;
@@ -22,6 +24,10 @@ public class Element implements ElementInterface{
 
     public Element(int x, int y) {
         this.pixelPoint = new Point(x * Screen.getTileSize() ,y * Screen.getTileSize());
+    }
+
+    public int getState(){
+        return state;
     }
 
     public Point getIndexPoint() {
@@ -90,6 +96,10 @@ public class Element implements ElementInterface{
         this.indexPoint.y = y;
     }
 
+    public int gatState(){
+        return state;
+    }
+
     public void setPixelPositionX(int x) {
         this.pixelPoint.x = x;
     }
@@ -115,14 +125,14 @@ public class Element implements ElementInterface{
                 this.pixelPoint.y += this.speed;
                 break;
             case Consts.LEFT:
-                if (pixelPoint.x - this.speed < 0) {
-                    this.pixelPoint.x = Screen.getScreenWidth() - Screen.getTileSize();
+                if (pixelPoint.x - this.speed == 0) {
+                    this.pixelPoint.x = Screen.getScreenWidth();
                 }
                 else
                     this.pixelPoint.x -= this.speed;
                 break;
             case Consts.RIGHT:
-                if (pixelPoint.x + this.speed > Screen.getScreenWidth()) {
+                if (pixelPoint.x + this.speed >= Screen.getScreenWidth()) {
                     this.pixelPoint.x = 0;
                 }
                 else
@@ -132,9 +142,10 @@ public class Element implements ElementInterface{
                 this.pixelPoint.x = 0;
                 break;
             case Consts.END:
-                this.pixelPoint.x = Screen.getScreenWidth() - Screen.getTileSize();
+                this.pixelPoint.x = Screen.getScreenWidth();
                 break;
         }
+        this.setImage(dir);
     }
 
     public Point setPixelPosition(Element element , int dir) {
@@ -149,14 +160,14 @@ public class Element implements ElementInterface{
                 newPosition.y += element.speed;
                 break;
             case Consts.LEFT:
-                if (newPosition.x - this.speed < 0) {
+                if (newPosition.x - this.speed <= 0) {
                     newPosition.x = Screen.getScreenWidth() - Screen.getTileSize();
                 }
                 else
                     newPosition.x -= element.speed;
                 break;
             case Consts.RIGHT:
-                if (newPosition.x + this.speed > Screen.getScreenWidth()) {
+                if (newPosition.x + this.speed >= Screen.getScreenWidth()) {
                     newPosition.x = 0;
                 }
                 else
@@ -179,20 +190,18 @@ public class Element implements ElementInterface{
         this.pixelPoint.y=this.getIndexPoint().y * Screen.getTileSize();
     }
 
+    public void setState(int s){
+        this.state=s;
+    }
+
     public void setImage(int direction) {
 
-        if (direction == Consts.RIGHT) {
-            image = new ImageIcon(imagesPath + "R" + imageNum + ".png").getImage();
-        }
-        else if (direction == Consts.DOWN) {
-            image = new ImageIcon(imagesPath + "D" + imageNum + ".png").getImage();
-        }
-        else if (direction == Consts.LEFT) {
-            image = new ImageIcon(imagesPath + "L" + imageNum + ".png").getImage();
-        }
-        else if (direction == Consts.UP) {
-            image = new ImageIcon(imagesPath + "U" + imageNum + ".png").getImage();
-        }
+        String [] directions = {"0","R","D","L","U","E","F"};
+        String dir = directions[direction];
+        if (pictureType==Consts.FRIGHTENED)
+            dir = directions[Consts.FRIGHTENED];
+        image = new ImageIcon(imagesPath + this.pictureType +"\\"+ dir +imageNum+ ".png").getImage();
+
     }
 
     public void beat() {

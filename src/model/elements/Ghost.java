@@ -1,10 +1,9 @@
 package model.elements;
 
 import control.Collisions;
-import control.GameLoop;
 import model.Map;
 import services.Consts;
-import services.DB.Arrays;
+import data.ineerDB.Arrays;
 import services.Services;
 import view.Screen;
 
@@ -24,7 +23,7 @@ public class Ghost extends Element {
         pictureType = type;
         imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\ghosts\\";
         setImage(0);
-        this.speed = 1;
+        this.speed = 2;
         this.eatable = false;
         this.target = new Point(0, 0);
         this.direction = 0;
@@ -56,6 +55,31 @@ public class Ghost extends Element {
 
     //////////////////////////////setters//////////////////////////////
 
+    public void setMode(int mode) {
+
+        if (state == Consts.EATEN) {
+            if (Collisions.isTouching(this,new Element(12,8))) {
+                this.state=0;
+            }
+        }
+        if (state!=Consts.EATEN) {
+            switch (mode) {
+                case Consts.FRIGHTENED:
+                    if (state != Consts.FRIGHTENED)
+                        setToFrightenMode();
+                    break;
+                case Consts.CHASE:
+                    if (state != Consts.CHASE)
+                        setToChaseMode();
+                    break;
+                case Consts.SCATTER:
+                    if (state != Consts.SCATTER)
+                        setToScatterMode();
+                    break;
+            }
+        }
+    }
+
     public void setToFrightenMode() {
         imageNum = 1;
         if (direction == 2)
@@ -68,44 +92,40 @@ public class Ghost extends Element {
             direction = 2;
         state = Consts.FRIGHTENED;
         pictureType = Consts.FRIGHTENED;
-    }
-
-    public void setModeFromGameLoop(int mode){
-        switch (mode) {
-            case Consts.FRIGHTENED:
-                if (state!=Consts.FRIGHTENED)
-                    setToFrightenMode();
-                break;
-            case Consts.CHASE:
-                if (state!=Consts.CHASE)
-                    setToChaseMode();
-                break;
-            case Consts.SCATTER:
-                if (state!=Consts.SCATTER)
-                    setToScatterMode();
-                break;
-        }
+        speed = 1;
+        eatable=true;
+        this.straitXY();
     }
 
     public void setToChaseMode() {
         imageNum = 1;
         pictureType = type;
         state = Consts.CHASE;
+        eatable=false;
+        speed=2;
+        this.straitXY();
     }
 
     public void setToScatterMode() {
         imageNum = 1;
         pictureType = type;
         state = Consts.SCATTER;
+        eatable=false;
+        this.straitXY();
+        speed=2;
     }
     
     public void setToEatenMode(){
         pictureType=Consts.EATEN;
         state=Consts.EATEN;
         imageNum=3;
+        speed = 4;
+        this.straitXY();
+        direction=0;
+        eatable=false;
     }
 
-                //////////////////////////////direction calculator//////////////////////////////
+    //////////////////////////////direction calculator//////////////////////////////
 
     public void calculateDirection(Point target) {
 
@@ -218,9 +238,9 @@ public class Ghost extends Element {
         target.y=Services.getRandomInt(0,Screen.getScreenHeight());
     }
 
-    private void eatenTargetCalculator(){
-        target.x= Map.getGhostsStartX();
-        target.y=Map.getIndexPMStartY();
+    private void eatenTargetCalculator() {
+        target.x = Map.getGhostsStartX();
+        target.y = Map.getGhostsStartY();
     }
 
     private Point calculateAmbush(PacMan pacMan,int distance){

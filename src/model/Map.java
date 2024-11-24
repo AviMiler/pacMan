@@ -2,7 +2,7 @@ package model;
 
 import control.GameLoop;
 import model.elements.Position;
-import services.DB.Arrays;
+import data.ineerDB.Arrays;
 import services.Services;
 import view.Screen;
 
@@ -14,7 +14,7 @@ public class Map {
 
     private static Arrays<Arrays<Position>> map;
     private static Arrays<Position> listOfPositions;
-    private static final String mapElementsPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\mapElements\\1.png";
+    private static final String mapElementsPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\mapElements\\";
     private static final String mapPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\maps\\map";
     private static Position prisePosition;
 
@@ -61,6 +61,8 @@ public class Map {
     public static int getIndexPMStartY(){
         return map.size()-2;
     }
+
+
 
     public static int getGhostsStartX(){
         return 10*Screen.getTileSize();
@@ -125,20 +127,23 @@ public class Map {
         for (int i = 0; i < map0.size(); i++) {
             map.add(new Arrays<>());
             for (int j = 0; j < map0.get(i).size(); j++) {
-                if (map0.get(i).get(j) == 0) {
-                    position = new Position(true, 0);
+                if (map0.get(i).get(j) == 0){
+                    position = new Position(true,false, 0);
                 } else if (map0.get(i).get(j) == 1) {
-                    position = new Position(false, 0);
+                    position = new Position(false,false, 0);
                     GameLoop.addToPriseCnt();
                 }else if (map0.get(i).get(j) == 3) {
-                    position = new Position(false, 1);
+                    position = new Position(false, false,1);
                     GameLoop.addToPriseCnt();
                 }
-                else {
-                    position = new Position(false, -2);
+                else if (map0.get(i).get(j) == 2) {
+                    position = new Position(false, false,-2);
+                }
+                else{
+                    position = new Position(false,true,0);
                 }
                 map.get(i).add(position);
-                if (!position.isWall() && position.isPrise()){//enter to position that can put a prise
+                if (position.isPath() && position.isPrise()){//enter to position that can put a prise
                     listOfPositions.add(position);
                 }
             }

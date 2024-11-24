@@ -1,31 +1,38 @@
 package control;
 
+import data.DB.DataBaseHandler;
+import data.DB.ScoreUnit;
+import data.HandleScores;
+import data.ineerDB.LinkedList;
 import model.elements.Ghost;
 import model.elements.PacMan;
 import services.Consts;
-import services.DB.Arrays;
+import data.ineerDB.Arrays;
 import view.*;
 import model.*;
 
+import javax.swing.*;
+
 public class GameLoop{
 
-    private PacMan pacMan;
-    private Arrays<Ghost> ghosts;
+    private static PacMan pacMan;
+    private static Arrays<Ghost> ghosts;
     private static int priseTimeToPut,priseTimeToEnd;
     private static int chaseTimer,scatterTimer,frightenTimer;
+    private static int pacmanEatenTime;
     private static int numOfPrise;
     private static int level;
-    private static int status = 0;
-    private static int statusCnt = 0;
-    private static int gameOverCnt = 3;
 
     public void startGame() {
 
+        LinkedList<ScoreUnit> scoresList = DataBaseHandler.readScoresFromFile();
+
         Map.updateMap();
         Screen.updateScreen();
-        GamePanel gamePanel = Window.startWindow();
-        gamePanel.setFocusable(true);
-        gamePanel.requestFocus();
+        Panel panel=Window.startWindow();
+        if (panel==null) return;
+        panel.setFocusable(true);
+        panel.requestFocus();
 
         final int FPS = 60;
         double drawInterval = (double) 1000000000 / FPS;
@@ -35,7 +42,7 @@ public class GameLoop{
         boolean endLevel = false;
         pacMan = new PacMan();
 
-        for (level = 1; level < 4 && gameOverCnt> 0;level++) {
+        for (level = 1; level < 4 && pacMan.getLife() > 0;level++) {
 
             pacMan.setPosition();
             ghosts = Ghost.initializeGhostList();
@@ -43,7 +50,7 @@ public class GameLoop{
             startPriseTimeToEnd();
             startChaseTimer();
 
-            while (gamePanel.getGameThread() != null && !endLevel) {
+            while (((GamePanel) panel).getGameThread() != null && !endLevel && pacMan.getLife() > 0) {
 
                 currentTime = System.nanoTime();
                 drawDelta += (currentTime - lastTime) / drawInterval;
@@ -55,21 +62,24 @@ public class GameLoop{
                 if (drawDelta >= 1) {
 
                     drawDelta--;
-                    update(gamePanel);
+                    update((GamePanel) panel);
                     GamePanel.setData(pacMan, ghosts);
-                    gamePanel.run();
+                    ((GamePanel) panel).run();
 
                 }
             }
-            gamePanel.endLevel();
-            numOfPrise=0;
-            Map.updateMap();
-            pacMan.addLife();
-            endLevel=false;
-
+            if (pacMan.getLife() > 0) {
+                ((GamePanel) panel).endLevel();
+                numOfPrise = 0;
+                Map.updateMap();
+                pacMan.addLife();
+                endLevel = false;
+            }
         }
-        if (gameOverCnt>0)
-            gamePanel.endGame();
+
+        panel = Window.replacePanel(panel,new EndGamePanel());
+        ((EndGamePanel)panel).endGame(scoresList,pacMan);
+        panel.repaint();
     }
 
     private void update(GamePanel gamePanel) {
@@ -78,8 +88,15 @@ public class GameLoop{
         PositionsControl.updatePrise(pacMan,ghosts);
         PositionsControl.updatePacMan(pacMan, gamePanel);
         PositionsControl.updateGhosts(ghosts,pacMan);
+        PositionsControl.updateConflict(pacMan,ghosts);
 
     }
+
+    public static void setPacmanEaten(){
+        pacMan.setPosition();
+        ghosts = Ghost.initializeGhostList();
+    }
+
 
     public static void startPriseTimeToPut() {
         priseTimeToPut=200;
@@ -142,6 +159,7 @@ public class GameLoop{
         if (chaseTimer > 0)
             chaseTimer--;
         if (frightenTimer == 0){
+            pacMan.resetGhostEatenCnt();
             startChaseTimer();
         }
         if (chaseTimer == 0){

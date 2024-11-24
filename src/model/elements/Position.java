@@ -7,18 +7,28 @@ public class Position {
     boolean wall;
     Prise prise;
     boolean wasCoin;
+    boolean gate;
 
-    public Position(boolean wall,int priseType) {
+    public Position(boolean wall,boolean gate,int priseType) {
         this.wall = wall;
-        setPrise(priseType);
+        this.gate = gate;
+        if (isPath()) {
+            setPrise(priseType);
+        }
         wasCoin = false;
     }
 
     public boolean isWall() {
         return wall;
     }
+    public boolean isGate() {
+        return gate;
+    }
     public boolean isPrise() {
         return prise!=null;
+    }
+    public boolean isPath(){
+        return !gate && !wall;
     }
 
     public boolean isSpacialPrise(){

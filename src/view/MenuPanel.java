@@ -6,18 +6,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MenuPanel extends JPanel {
+public class MenuPanel extends Panel {
 
     int choice = 0;
 
     public MenuPanel() {
 
-        this.setPreferredSize(new Dimension(Screen.getScreenWidth(), Screen.getScreenHeight()));
-        this.setSize(Map.getPixelsWidth(), Map.getPixelsHeight());
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-        this.requestFocusInWindow();
+        super();
         this.setLayout(null);
         setButtons();
         setVisible(true);

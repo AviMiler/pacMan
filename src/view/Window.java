@@ -5,10 +5,10 @@ import javax.swing.*;
 public class Window {
 
     static JFrame window;
-    static GamePanel choicePanel;
-    static MenuPanel menuPanel = new MenuPanel();
+    static Panel choicePanel;
+    static Panel menuPanel = new MenuPanel();
 
-    public static GamePanel startWindow(){
+    public static Panel startWindow() {
 
         window = new JFrame();
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -16,16 +16,11 @@ public class Window {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setLocation(0, 0);
-
         window.add(menuPanel);
         window.pack();
 
-        menu(menuPanel.getChoice());
-        window.remove(menuPanel);
-        window.add(choicePanel);
-        window.pack();
-
-        return choicePanel;
+        menu(((MenuPanel) menuPanel).getChoice());
+        return replacePanel(menuPanel, choicePanel);
 
     }
 
@@ -38,9 +33,24 @@ public class Window {
                 //choicePanel = new ScoresPanel();
                 break;
             case 3:
+                choicePanel=null;
+                close();
                 break;
         }
+    }
 
+    public static Panel replacePanel(Panel panel1, Panel panel2) {
+
+        if (panel1 != null && panel2 != null) {
+            window.remove(panel1);
+            window.add(panel2);
+            window.pack();
+        }
+        return panel2;
+    }
+
+    public static void close(){
+        window.dispose();
     }
 
 }

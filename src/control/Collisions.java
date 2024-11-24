@@ -2,21 +2,15 @@ package control;
 
 import model.Map;
 import model.elements.Element;
-import model.elements.PacMan;
-import model.elements.Position;
 import services.Consts;
-import services.DB.Arrays;
-import model.elements.Permanent;
 import view.Screen;
-
-import java.awt.*;
 
 public class Collisions {
 
     public static boolean isIndexTouchWall(int x, int y) {
         if (x==-1 || x >= Map.getMap().size())
             return false;
-        return Map.getMap().get(y).get(x).isWall();
+        return !Map.getMap().get(y).get(x).isPath();
     }
 
     public static boolean isIndexTouchWall(Element element, int dir) {

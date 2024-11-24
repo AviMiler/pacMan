@@ -1,34 +1,31 @@
 package view;
 
+import data.DB.DataBaseHandler;
+import data.DB.ScoreUnit;
+import data.ineerDB.LinkedList;
 import model.elements.Ghost;
 import model.elements.PacMan;
-import model.elements.Prise;
 import services.*;
 import control.*;
-import model.*;
-import services.DB.Arrays;
+import data.ineerDB.Arrays;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GamePanel extends JPanel implements Runnable, KeyListener {
+public class GamePanel extends Panel implements Runnable, KeyListener {
 
     Thread gameThread;
     private static PacMan pacMan = new PacMan();
     private static Arrays<Ghost> ghosts = new Arrays<>();
     private static boolean endLevel = false;
-    private static boolean endGame = false;
+    private static LinkedList<ScoreUnit> scoresList;
 
     public GamePanel() {
-        this.setPreferredSize(new Dimension(Screen.getScreenWidth(),Screen.getScreenHeight()));
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);
-        this.addKeyListener(this);
-        this.setFocusable(true);
+        super();
         this.startGameThread();
-        this.requestFocusInWindow();
+        this.addKeyListener(this);
     }
 
     public void startGameThread() {
@@ -61,15 +58,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         if (endLevel){
             Printer.printEndLevel(graphics2D);
         }
-        else if (endGame){
-            Printer.printEndGame(graphics2D);
-        }
         else {
             Printer.printMap(graphics2D);
             Printer.printPacMan(pacMan, graphics2D);
             Printer.printGhosts(ghosts, graphics2D);
             Printer.printData(pacMan, graphics2D);
         }
+
     }
 
     public Thread getGameThread() {
@@ -80,22 +75,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         GamePanel.pacMan = pacMan;
         GamePanel.ghosts = ghosts;
     }
-
-    public void endLevel(){
-        endLevel = true;
+    public void endLevel() {
+        endLevel=true;
         repaint();
-        while (endLevel)
-            System.out.println("wait");
+        while (getDirection()!=Consts.SPACE){
+            System.out.print("");
+        }
+        endLevel=false;
     }
 
-    public void endGame(){
-        endGame = true;
-        repaint();
-    }
-
-
-    ////////////////////////////////////////
-    public boolean up, down, left, right;
+    ////////////////////////////////////////Key Handler///////////////////////////////////
+    public boolean up, down, left, right,space;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -110,31 +100,32 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 if (!Collisions.isIndexTouchWall(pacMan.getIndexPositionX(), pacMan.getIndexPositionY() - 1)) {
-                    down = left = right = false;
+                    down = left = right = space =false;
                     up = true;
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 if (!Collisions.isIndexTouchWall(pacMan.getIndexPositionX(), pacMan.getIndexPositionY() + 1)) {
-                    up = left = right = false;
+                    up = left = right = space =false;
                     down = true;
                 }
                 break;
             case KeyEvent.VK_LEFT:
                 if (!Collisions.isIndexTouchWall(pacMan.getIndexPositionX() - 1, pacMan.getIndexPositionY())) {
-                    up = down = right = false;
+                    up = down = right = space =false;
                     left = true;
                 }
                 break;
             case KeyEvent.VK_RIGHT:
                 if (!Collisions.isIndexTouchWall(pacMan.getIndexPositionX() + 1, pacMan.getIndexPositionY())) {
-                    up = down = left = false;
+                    up = down = left = space = false;
                     right = true;
                 }
                 break;
             case KeyEvent.VK_SPACE:
                     endLevel = false;
                     up=down=left=right=false;
+                    space=true;
                 break;
         }
     }
@@ -157,6 +148,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         else if (right){
             return Consts.RIGHT;
         }
+        else if (space){
+            return Consts.SPACE;
+        }
         return 0;
     }
+
 }

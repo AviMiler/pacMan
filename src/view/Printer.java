@@ -1,12 +1,13 @@
 package view;
 
 import control.GameLoop;
+import data.DB.DataBaseHandler;
+import data.DB.ScoreUnit;
+import data.ineerDB.LinkedList;
 import model.Map;
 import model.elements.Ghost;
 import model.elements.PacMan;
-import model.elements.Prise;
-import services.Consts;
-import services.DB.Arrays;
+import data.ineerDB.Arrays;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,22 +19,27 @@ public class Printer extends JPanel {
     public static void printMap(Graphics2D g) {
 
         Image image;
-        int screenX=0, screenY=0;
+        int screenX = 0, screenY = 0;
 
         for (int i = 0; i < Map.getMap().size(); i++) {
-            for (int j = 0;j < Map.getMap().get(i).size(); j++) {
+            for (int j = 0; j < Map.getMap().get(i).size(); j++) {
 
                 if (Map.getMap().get(i).get(j).isWall()) {
-                    image = new ImageIcon(Map.getMapElementPath()).getImage();
-                    g.drawImage(image, screenX, screenY + m, Screen.getTileSize(), Screen.getTileSize(), null);
-                }
-                else if (Map.getMap().get(i).get(j).isPrise()){
+                    image = new ImageIcon(Map.getMapElementPath()+"1.png").getImage();
+                } else if (Map.getMap().get(i).get(j).isPrise()) {
                     image = new ImageIcon(Map.getMap().get(i).get(j).getPrise().getImagesPath()).getImage();
-                    g.drawImage(image, screenX, screenY + m, Screen.getTileSize(), Screen.getTileSize(), null);
-                }
+                } else if (Map.getMap().get(i).get(j).isGate()) {
+                    image = new ImageIcon(Map.getMapElementPath()+"2.png").getImage();
+                }else
+                    image = new ImageIcon("dd").getImage();
+
+
+
+                g.drawImage(image, screenX, screenY + m, Screen.getTileSize(), Screen.getTileSize(), null);
                 screenX += Screen.getTileSize();
             }
-            screenY += Screen.getTileSize();screenX=0;
+            screenY += Screen.getTileSize();
+            screenX = 0;
         }
 
     }
@@ -49,8 +55,8 @@ public class Printer extends JPanel {
         c.add(Color.RED);c.add(Color.PINK);c.add(Color.CYAN);c.add(Color.ORANGE);
         for (int i = 0; i < ghosts.size(); i++) {
             g.setColor(c.get(i));
-            g.setFont(g.getFont().deriveFont(24f));
-            g.drawString("X",ghosts.get(i).getTarget().x,ghosts.get(i).getTarget().y + m);
+            g.setFont(g.getFont().deriveFont(48f));
+            g.drawString(".",ghosts.get(i).getTarget().x,ghosts.get(i).getTarget().y + m);
             g.drawImage(ghosts.get(i).getImage(), ghosts.get(i).getPixelPositionX(), ghosts.get(i).getPixelPositionY() + m, Screen.getTileSize(), Screen.getTileSize(), null);
         }
     }
@@ -99,9 +105,41 @@ public class Printer extends JPanel {
 
     }
 
-    public static void printEndGame(Graphics2D g){
+    public static void printEndGame(Graphics2D g,boolean end,boolean over){
         g.setFont(Screen.customFont);
         g.setColor(Color.RED);
-        g.drawString("END GAME", 9*Screen.getTileSize(), 10*Screen.getTileSize());
+        if (end)
+            g.drawString("END GAME", 9*Screen.getTileSize(), 10*Screen.getTileSize());
+        else if (over)
+            g.drawString("GAME OVER", 9*Screen.getTileSize(), 10*Screen.getTileSize());
+    }
+
+    public static void printScoresList(Graphics2D g,LinkedList<ScoreUnit> scoresList){
+        g.setFont(Screen.customFont);
+        g.setColor(Color.ORANGE);
+        int j = 1;
+        g.drawString("BEST SCORES:", 7*Screen.getTileSize(), 150);
+        g.setColor(Color.WHITE);
+        for (int i = scoresList.size()-1; i >= 0 ; i--) {
+            ScoreUnit score = scoresList.get(i);
+            g.drawString(score.getName()+" "+score.getPoints(), 9*Screen.getTileSize(), 180+(j)*Screen.getTileSize());
+            j++;
+        }
+    }
+
+    public static void printGotRecord(Graphics2D g,String name){
+        g.setFont(Screen.customFont);
+        g.setColor(Color.YELLOW);
+        g.drawString("You got a new record:", 4*Screen.getTileSize(), 200);
+        g.drawString("please enter your name", 3*Screen.getTileSize(), 200+Screen.getTileSize());
+        g.setColor(Color.BLUE);
+        g.drawString(name+"_", 5*Screen.getTileSize(), 200+Screen.getTileSize()*3);
+
+    }
+
+    public static void printBye(Graphics2D g){
+        g.setColor(Color.YELLOW);
+        g.setFont(Screen.customFont);
+        g.drawString("BYE BYE )-:", 6*Screen.getTileSize(), 200);
     }
 }

@@ -1,5 +1,6 @@
 package model.elements;
 
+import model.Map;
 import services.Consts;
 import view.Screen;
 
@@ -31,7 +32,7 @@ public class Element implements ElementInterface{
     }
 
     public Point getIndexPoint() {
-        return new Point((this.pixelPoint.x + Screen.getTileSize()/2+1) / Screen.getTileSize(),(this.pixelPoint.y + Screen.getTileSize()/2+1)/ Screen.getTileSize());
+        return new Point((this.pixelPoint.x + Screen.getTileSize()/2) / Screen.getTileSize(),(this.pixelPoint.y + Screen.getTileSize()/2)/ Screen.getTileSize());
     }
 
     public Point getPixelPoint() {
@@ -53,11 +54,11 @@ public class Element implements ElementInterface{
         return pixelPoint.y  + (Screen.getTileSize()/2);
     }
 
-    public int getCollisionMargin() {
-        return collisionMargin;
-    }
-
     public int getIndexPositionX(){
+        if (getIndexPoint().x>= Map.getTilesWidth())
+            return Map.getTilesWidth()-1;
+        else if (getIndexPoint().x<0)
+            return 0;
         return getIndexPoint().x;
     }
 
@@ -94,10 +95,6 @@ public class Element implements ElementInterface{
     }
     public void setIndexPositionY(int y) {
         this.indexPoint.y = y;
-    }
-
-    public int gatState(){
-        return state;
     }
 
     public void setPixelPositionX(int x) {
@@ -189,14 +186,14 @@ public class Element implements ElementInterface{
     public void straitY() {
         this.pixelPoint.y=this.getIndexPoint().y * Screen.getTileSize();
     }
-
-    public void setState(int s){
-        this.state=s;
+    public void straitXY(){
+        this.straitX();
+        this.straitY();
     }
 
     public void setImage(int direction) {
 
-        String [] directions = {"0","R","D","L","U","E","F"};
+        String [] directions = {"0","R","D","L","U","E","F","nothing"};
         String dir = directions[direction];
         if (pictureType==Consts.FRIGHTENED)
             dir = directions[Consts.FRIGHTENED];

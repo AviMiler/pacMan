@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Screen {
 
-    private static final int originalTileSize = 29;
+    private static final int originalTileSize = 28;
     private static final int scale = 1;
     private static int maxRow = Map.getTilesHeight();
     private static int maxCol = Map.getTilesWidth();

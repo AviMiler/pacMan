@@ -1,4 +1,4 @@
-package services.DB;
+package data.ineerDB;
 
 import java.util.ArrayList;
 
@@ -16,6 +16,10 @@ public class Arrays<T>{
 
     public void set(int i, T t){
         list.set(i, t);
+    }
+
+    public boolean isEmpty(){
+        return list.isEmpty();
     }
 
     public T getLast(){

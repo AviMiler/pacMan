@@ -3,12 +3,8 @@ package control;
 import model.Map;
 import model.elements.*;
 import services.Consts;
-import services.DB.Arrays;
-import services.Services;
+import data.ineerDB.Arrays;
 import view.GamePanel;
-import view.Screen;
-
-import java.awt.*;
 
 public class PositionsControl {
 
@@ -57,7 +53,7 @@ public class PositionsControl {
             element.updateScore(position.getPrise().getScore());
             if (position.getPrise().getType()==1){
                 for (int i = 0; i < ghosts.size(); i++) {
-                        ghosts.get(i).setToFrightenMode();
+                        ghosts.get(i).setMode(Consts.FRIGHTENED);
                     }
                 GameLoop.startFrightenTimer();
             }
@@ -86,7 +82,7 @@ public class PositionsControl {
         for (int i = 0; i < ghosts.size(); i++) {
             Ghost ghost = ghosts.get(i);
             ghost.beat();
-            ghost.setModeFromGameLoop(GameLoop.getGhostMode());
+            ghost.setMode(GameLoop.getGhostMode());
             ghost.targetCalculator(pacMan,ghosts.get(0));
             ghost.calculateDirection(ghost.getTarget());
             ghost.setPixelPosition(ghost.getDirection());
@@ -97,10 +93,18 @@ public class PositionsControl {
     public static void updateConflict(PacMan pacMan,Arrays<Ghost> ghosts) {
         for (int i = 0; i < ghosts.size(); i++) {
             if(Collisions.isTouching(pacMan, ghosts.get(i))) {
-                if (ghosts.get(0).isEatable()){
-
+                if (!ghosts.get(i).isEatable() && ghosts.get(i).getState()!=Consts.EATEN){//pacman eaten
+                    pacMan.eaten();
+                    for (int j = 0; j < ghosts.size(); j++) {
+                        ghosts.get(j).setImage(7);
+                    }
+                    GameLoop.setPacmanEaten();
                 }
-
+                else if (ghosts.get(i).isEatable()){//ghost eaten
+                    ghosts.get(i).setToEatenMode();
+                    pacMan.updateScore(200*pacMan.getGhostEatenCnt());
+                    pacMan.addToGhostEatenCnt();
+                }
             }
         }
     }

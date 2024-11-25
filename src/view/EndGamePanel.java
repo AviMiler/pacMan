@@ -127,7 +127,9 @@ public class EndGamePanel extends Panel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         delete = e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
-        note=e.getKeyChar()+"";
+        char t = e.getKeyChar();
+        //if (Character.isAlphabetic((t)))
+            note=t+"";
         readName(note,delete);
     }
 

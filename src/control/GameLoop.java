@@ -41,6 +41,8 @@ public class GameLoop{
         long currentTime;
         boolean endLevel = false;
         pacMan = new PacMan();
+numOfPrise = 4;
+        ///////////////////////the game loop//////////////////////////
 
         for (level = 1; level < 4 && pacMan.getLife() > 0;level++) {
 
@@ -63,23 +65,29 @@ public class GameLoop{
 
                     drawDelta--;
                     update((GamePanel) panel);
-                    GamePanel.setData(pacMan, ghosts);
+                    ((GamePanel) panel).setData(pacMan, ghosts);
                     ((GamePanel) panel).run();
 
                 }
             }
             if (pacMan.getLife() > 0) {
-                ((GamePanel) panel).endLevel();
                 numOfPrise = 0;
                 Map.updateMap();
                 pacMan.addLife();
+                ((GamePanel) panel).endLevel();
+                while (((GamePanel) panel).getDirection()!=Consts.SPACE) {
+                    panel.repaint();
+                }
                 endLevel = false;
             }
         }
 
+        //end of game loop//
+
         panel = Window.replacePanel(panel,new EndGamePanel());
         ((EndGamePanel)panel).endGame(scoresList,pacMan);
         panel.repaint();
+
     }
 
     private void update(GamePanel gamePanel) {
@@ -97,6 +105,7 @@ public class GameLoop{
         ghosts = Ghost.initializeGhostList();
     }
 
+    //////////////timers and counters//////////////
 
     public static void startPriseTimeToPut() {
         priseTimeToPut=200;
@@ -178,6 +187,7 @@ public class GameLoop{
     public static void addToPriseCnt(){
         numOfPrise++;
     }
+
     public static void removeFromPriseCnt(){
         numOfPrise--;
     }

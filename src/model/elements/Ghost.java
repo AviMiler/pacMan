@@ -28,6 +28,7 @@ public class Ghost extends Element {
         this.target = new Point(0, 0);
         this.direction = 0;
         this.collisionMargin = Screen.getTileSize() / 2;
+        this.setMode(Consts.CHASE);
 
     }
 

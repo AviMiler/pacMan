@@ -17,8 +17,8 @@ import java.awt.event.KeyListener;
 public class GamePanel extends Panel implements Runnable, KeyListener {
 
     Thread gameThread;
-    private static PacMan pacMan = new PacMan();
-    private static Arrays<Ghost> ghosts = new Arrays<>();
+    private PacMan pacMan = new PacMan();
+    private Arrays<Ghost> ghosts = new Arrays<>();
     private static boolean endLevel = false;
     private static LinkedList<ScoreUnit> scoresList;
 
@@ -71,17 +71,12 @@ public class GamePanel extends Panel implements Runnable, KeyListener {
         return gameThread;
     }
 
-    public static void setData(PacMan pacMan,Arrays<Ghost> ghosts) {
-        GamePanel.pacMan = pacMan;
-        GamePanel.ghosts = ghosts;
+    public void setData(PacMan pacMan, Arrays<Ghost> ghosts) {
+        this.pacMan = pacMan;
+        this.ghosts = ghosts;
     }
     public void endLevel() {
-        endLevel=true;
-        repaint();
-        while (getDirection()!=Consts.SPACE){
-            System.out.print("");
-        }
-        endLevel=false;
+        endLevel = !endLevel;
     }
 
     ////////////////////////////////////////Key Handler///////////////////////////////////

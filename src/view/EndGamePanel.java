@@ -1,5 +1,6 @@
 package view;
 
+import control.GameLoop;
 import data.DB.DataBaseHandler;
 import data.DB.ScoreUnit;
 import data.HandleScores;
@@ -24,6 +25,7 @@ public class EndGamePanel extends Panel implements KeyListener {
     boolean delete;
     ScoreUnit scoreUnit = null;
     JButton button1 = createStyledButton("NEXT",345,Color.BLUE);
+    JButton button2 = createStyledButton("END",400,Color.RED);
 
     public EndGamePanel() {
         super();
@@ -56,6 +58,7 @@ public class EndGamePanel extends Panel implements KeyListener {
             case 2:
                 DataBaseHandler.saveScoresListToFile(scoresList);
                 button1.setText("EXIT");
+                this.add(button2);
                 Printer.printScoresList(graphics2D, scoresList);
                 break;
             case 3:
@@ -63,7 +66,7 @@ public class EndGamePanel extends Panel implements KeyListener {
                 break;
             case 4:
                 Window.close();
-
+            case 100:
         }
     }
 
@@ -109,6 +112,7 @@ public class EndGamePanel extends Panel implements KeyListener {
 
     private void setButtons() {
         button1 = createStyledButton("NEXT", 5*Screen.getScreenHeight() / 7, Color.GREEN);
+        button2 = createStyledButton("RESTART", 5*Screen.getScreenHeight() / 8, Color.RED);
 
         button1.addActionListener(new ActionListener() {
             @Override
@@ -117,19 +121,26 @@ public class EndGamePanel extends Panel implements KeyListener {
                 repaint();
             }
         });
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                choice=100;
+                repaint();
+            }
+        });
 
         this.add(button1);
-
     }
 
     /////////////////////////////keyFunctions////////////////////////////////
 
     @Override
     public void keyReleased(KeyEvent e) {
+        note="";
         delete = e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
         char t = e.getKeyChar();
-        //if (Character.isAlphabetic((t)))
-            note=t+"";
+        if (Character.isAlphabetic((t)))
+            note+=t;
         readName(note,delete);
     }
 

@@ -42,6 +42,17 @@ public class Collisions {
     }
 
     public static boolean isTouching(Element a,Element b) {
-        return a.getIndexPoint().x == b.getIndexPoint().x && a.getIndexPoint().y == b.getIndexPoint().y;
+
+        //return a.getIndexPoint().x == b.getIndexPoint().x && a.getIndexPoint().y == b.getIndexPoint().y;
+
+        int w = Screen.getTileSize();
+        int x1 = a.getPixelPositionX();
+        int y1 = a.getPixelPositionY();
+        int x2 = b.getPixelPositionX();
+        int y2 = b.getPixelPositionY();
+        boolean xOverlap = x1 < x2 + w && x1 + w > x2;
+        boolean yOverlap = y1 < y2 + w && y1 + w > y2;
+
+        return xOverlap && yOverlap;
     }
 }

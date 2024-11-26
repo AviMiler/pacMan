@@ -14,19 +14,16 @@ public class PositionsControl {
 
         switch (gamePanel.getDirection()) {
             case Consts.UP:
-                pacMan.setDirection(Consts.UP);
                 if (!Collisions.isTouchWall(pacMan, Consts.UP)) {
                     pacMan.setPixelPosition(Consts.UP);
                 }
                 break;
             case Consts.DOWN:
-                pacMan.setDirection(Consts.DOWN);
                 if (!Collisions.isTouchWall(pacMan, Consts.DOWN)) {
                     pacMan.setPixelPosition(Consts.DOWN);
                 }
                 break;
             case Consts.LEFT:
-                pacMan.setDirection(Consts.LEFT);
                 if (pacMan.getPixelPoint().x - pacMan.getSpeed() <= 0)
                     pacMan.setPixelPosition(Consts.END);
                 else if (!Collisions.isTouchWall(pacMan, Consts.LEFT)) {
@@ -34,7 +31,6 @@ public class PositionsControl {
                 }
                 break;
             case Consts.RIGHT:
-                pacMan.setDirection(Consts.RIGHT);
                 if (pacMan.getPixelPoint().x + pacMan.getSpeed() >= Map.getPixelsWidth() - 32)
                     pacMan.setPixelPosition(Consts.START);
                 else if (!Collisions.isTouchWall(pacMan, Consts.RIGHT)) {
@@ -42,6 +38,7 @@ public class PositionsControl {
                 }
                 break;
         }
+        pacMan.setDirection(gamePanel.getDirection());
         pacMan.setImage(pacMan.getDirection());
     }
 
@@ -82,7 +79,6 @@ public class PositionsControl {
         for (int i = 0; i < ghosts.size(); i++) {
             Ghost ghost = ghosts.get(i);
             ghost.beat();
-            ghost.setMode(GameLoop.getGhostMode());
             ghost.targetCalculator(pacMan,ghosts.get(0));
             ghost.calculateDirection(ghost.getTarget());
             ghost.setPixelPosition(ghost.getDirection());
@@ -90,7 +86,15 @@ public class PositionsControl {
         }
     }
 
-    public static void updateConflict(PacMan pacMan,Arrays<Ghost> ghosts) {
+    public static void updateGhostsMode(Arrays<Ghost> ghosts,int mode,int ghostNum) {
+        if (ghostNum==0){
+            for (int i = 0; i < ghosts.size(); i++) {
+                ghosts.get(i).setMode(mode);
+            }
+        }
+    }
+
+    public static void updateConflict(PacMan pacMan,Arrays<Ghost> ghosts){
         for (int i = 0; i < ghosts.size(); i++) {
             if(Collisions.isTouching(pacMan, ghosts.get(i))) {
                 if (!ghosts.get(i).isEatable() && ghosts.get(i).getState()!=Consts.EATEN){//pacman eaten

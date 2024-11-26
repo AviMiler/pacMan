@@ -34,7 +34,6 @@ public class Element implements ElementInterface{
     public Point getIndexPoint() {
         return new Point((this.pixelPoint.x + Screen.getTileSize()/2) / Screen.getTileSize(),(this.pixelPoint.y + Screen.getTileSize()/2)/ Screen.getTileSize());
     }
-
     public Point getPixelPoint() {
         return pixelPoint;
     }
@@ -42,7 +41,6 @@ public class Element implements ElementInterface{
     public int getPixelPositionX(){
         return pixelPoint.x;
     }
-
     public int getPixelPositionY(){
         return pixelPoint.y;
     }
@@ -61,7 +59,6 @@ public class Element implements ElementInterface{
             return 0;
         return getIndexPoint().x;
     }
-
     public int getIndexPositionY(){
         return getIndexPoint().y;
     }
@@ -204,12 +201,16 @@ public class Element implements ElementInterface{
     public void beat() {
         beat++;
         if (beat==10){
-            if (imageNum==1)
-                imageNum = 2;
-            else if (imageNum==2)
-                imageNum = 1;
+            changeImage();
             beat = 0;
         }
+    }
+
+    public void changeImage(){
+        if (imageNum==1)
+            imageNum = 2;
+        else if (imageNum==2)
+            imageNum = 1;
     }
 
     public void updateScore(int score) {

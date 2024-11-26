@@ -88,11 +88,12 @@ public class Printer extends JPanel {
     }
 
     private static void printPriseTime(Graphics2D g) {
-        int time = GameLoop.getPriseTimeToEnd();
-        if (time!=-1){
-            g.setFont(Screen.customFont);
-            g.setColor(Color.WHITE);
-            g.drawString("Prise time:" + time/60, 0, 52);
+        int priseTime = GameLoop.getPriseTimeToEnd();
+        g.setFont(Screen.customFont);
+        g.setColor(Color.WHITE);
+        g.drawString("Time:" + GameLoop.getGameTime()/60, Screen.getScreenWidth()/2-3*Screen.getTileSize(), 25);
+        if (priseTime!=-1){
+            g.drawString("Prise time:" + priseTime/60, 0, 52);
         }
 
     }

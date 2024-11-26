@@ -41,7 +41,7 @@ public class DataBaseHandler {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
             for (int i = 0; i < scoresList.size(); i++) {
-                bw.write(scoresList.get(i).getName() + " " + scoresList.get(i).getPoints() + "\n");
+                bw.write(scoresList.get(i).getName() + "@" + scoresList.get(i).getPoints() + "\n");
             }
             bw.close();
 
@@ -51,7 +51,7 @@ public class DataBaseHandler {
     }
 
     private static ScoreUnit convertLineToScoreUnit(String line) {
-        String[] parts = line.split(" ");
+        String[] parts = line.split("@");
         int points;
         String name;
         try {

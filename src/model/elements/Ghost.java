@@ -13,12 +13,14 @@ public class Ghost extends Element {
 
     private Point target;
     private int direction;
-    public boolean eatable;
+    private boolean eatable;
+    private boolean released;
+    private boolean isReleased;
 
     //////////////////////////////constructors//////////////////////////////
 
     public Ghost(int type) {
-        super(9 + type, 8);
+        super(9 + type, 10);
         this.type = type;
         pictureType = type;
         imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\ghosts\\";
@@ -29,7 +31,8 @@ public class Ghost extends Element {
         this.direction = 0;
         this.collisionMargin = Screen.getTileSize() / 2;
         this.setMode(Consts.CHASE);
-
+        this.released = false;
+        this.isReleased = false;
     }
 
     public static Arrays<Ghost> initializeGhostList() {
@@ -37,6 +40,7 @@ public class Ghost extends Element {
         for (int i = 1; i < 5; i++) {
             ghosts.add(new Ghost(i));
         }
+        ghosts.get(0).release();
         return ghosts;
     }
 
@@ -58,13 +62,14 @@ public class Ghost extends Element {
 
     public void setMode(int mode) {
 
-        if (state == Consts.EATEN) {
-            if (Collisions.isTouching(this,new Element(12,8))) {
-                this.state=0;
-            }
-        }
-        if (state!=Consts.EATEN) {
+        if (isReleased) {
             switch (mode) {
+                case Consts.EATEN:
+                    if (Collisions.isTouching(this, new Element(12, 8))) {
+                        System.out.println("dd");
+                        setToChaseMode();
+                    }
+                    break;
                 case Consts.FRIGHTENED:
                     if (state != Consts.FRIGHTENED)
                         setToFrightenMode();
@@ -94,7 +99,7 @@ public class Ghost extends Element {
         state = Consts.FRIGHTENED;
         pictureType = Consts.FRIGHTENED;
         speed = 1;
-        eatable=true;
+        eatable = true;
         this.straitXY();
     }
 
@@ -102,8 +107,8 @@ public class Ghost extends Element {
         imageNum = 1;
         pictureType = type;
         state = Consts.CHASE;
-        eatable=false;
-        speed=2;
+        eatable = false;
+        speed = 2;
         this.straitXY();
     }
 
@@ -111,21 +116,26 @@ public class Ghost extends Element {
         imageNum = 1;
         pictureType = type;
         state = Consts.SCATTER;
-        eatable=false;
+        eatable = false;
         this.straitXY();
-        speed=2;
-    }
-    
-    public void setToEatenMode(){
-        pictureType=Consts.EATEN;
-        state=Consts.EATEN;
-        imageNum=3;
-        speed = 4;
-        this.straitXY();
-        direction=0;
-        eatable=false;
+        speed = 2;
     }
 
+    public void setToEatenMode() {
+        pictureType = Consts.EATEN;
+        state = Consts.EATEN;
+        imageNum = 3;
+        speed = 4;
+        this.straitXY();
+        direction = 0;
+        eatable = false;
+    }
+
+    public void release() {
+        if (!isReleased) {
+            released = true;
+        }
+    }
     //////////////////////////////direction calculator//////////////////////////////
 
     public void calculateDirection(Point target) {
@@ -134,9 +144,14 @@ public class Ghost extends Element {
         Point nextPosition1;
         Point nextPosition2;
 
-        if (possibleDirections.size()>0) {
+        if (released && Map.getMap().get(getIndexPositionY()-1).get(getIndexPositionX()).isGate()) {
+            direction = Consts.UP;
+            released=false;
+            isReleased = true;
+        } else if (!possibleDirections.isEmpty()) {
             nextPosition1 = setPixelPosition(this, possibleDirections.get(0));
             this.direction = possibleDirections.get(0);
+
 
             for (int i = 1; i < possibleDirections.size(); i++) {
                 nextPosition2 = setPixelPosition(this, possibleDirections.get(i));
@@ -146,41 +161,50 @@ public class Ghost extends Element {
                     this.direction = possibleDirections.get(i);
                 }
             }
-        }
+
+        } else if (Collisions.isIndexTouchWall(this, direction) && isInJunction())
+            reverse();
     }
 
-    private Arrays<Integer> possibleDirections(){
+    private Arrays<Integer> possibleDirections() {
         final Arrays<Integer> possibleDirections = new Arrays<>();
-        for (int i = 4; i > 0; i--) {
-            if (this.direction+2 != i && this.direction - 2!= i){
-                if (!Collisions.isIndexTouchWall(this,i) && isInJunction())
-                    possibleDirections.add(i);
+        for (int newDirection = 4; newDirection > 0; newDirection--) {
+            if (newDirection != this.direction + 2 && newDirection != this.direction - 2) {//check if reverse
+                if (!Collisions.isIndexTouchWall(this, newDirection) && isInJunction())
+                    possibleDirections.add(newDirection);
             }
         }
         return possibleDirections;
     }
 
-    private boolean checkIfBCloserThenA(Point positionA, Point positionB,Point target){
-        return positionA.distance(target)>positionB.distance(target);
+    private boolean checkIfBCloserThenA(Point positionA, Point positionB, Point target) {
+        return positionA.distance(target) > positionB.distance(target);
     }
 
     private boolean isInJunction() {
         return this.pixelPoint.x % Screen.getTileSize() == 0 && this.pixelPoint.y % Screen.getTileSize() == 0;
     }
 
-    public void strait(){
-        if (this.direction==Consts.RIGHT || this.direction==Consts.LEFT){
+    public void strait() {
+        if (this.direction == Consts.RIGHT || this.direction == Consts.LEFT) {
             this.straitY();
         }
-        if (this.direction==Consts.UP || this.direction==Consts.DOWN){
+        if (this.direction == Consts.UP || this.direction == Consts.DOWN) {
             this.straitX();
         }
     }
 
+    public void reverse() {
+        if (this.direction == Consts.LEFT)
+            this.direction = Consts.RIGHT;
+        else if (this.direction == Consts.RIGHT)
+            this.direction = Consts.LEFT;
+    }
 
-                //////////////////////////////targets calculator//////////////////////////////
 
-    public void targetCalculator(PacMan pacMan,Ghost ghost) {
+    //////////////////////////////targets calculator//////////////////////////////
+
+    public void targetCalculator(PacMan pacMan, Ghost ghost) {
         switch (state) {
             case Consts.CHASE:
                 chaseTargetCalculator(pacMan, ghost);
@@ -196,7 +220,7 @@ public class Ghost extends Element {
         }
     }
 
-    public void chaseTargetCalculator(PacMan pacMan,Ghost blinky){
+    public void chaseTargetCalculator(PacMan pacMan, Ghost blinky) {
         switch (this.type) {
             case Consts.BLINKY:
                 this.target = new Point(pacMan.getPixelPositionX(), pacMan.getPixelPositionY());
@@ -211,20 +235,20 @@ public class Ghost extends Element {
                 break;
             case Consts.CLYDE:
                 target = blinky.getTarget();
-                if (this.getPixelPoint().distance(pacMan.pixelPoint)<8*Screen.getTileSize()){
-                    target = new Point(0, Screen.getScreenHeight()-2*Screen.getTileSize());
+                if (this.getPixelPoint().distance(pacMan.pixelPoint) < 8 * Screen.getTileSize()) {
+                    target = new Point(0, Screen.getScreenHeight() - 2 * Screen.getTileSize());
                 }
 
         }
     }
 
-    public void scatterTargetCalculator () {
+    public void scatterTargetCalculator() {
         switch (this.type) {
             case Consts.BLINKY:
-                this.target = new Point(Screen.getScreenWidth()-Screen.getTileSize(), Screen.getTileSize());
+                this.target = new Point(Screen.getScreenWidth() - Screen.getTileSize(), Screen.getTileSize());
                 break;
             case Consts.INKY:
-                this.target = new Point(Screen.getScreenWidth()-Screen.getTileSize(), Screen.getScreenHeight()-2*Screen.getTileSize());
+                this.target = new Point(Screen.getScreenWidth() - Screen.getTileSize(), Screen.getScreenHeight() - 2 * Screen.getTileSize());
                 break;
             case Consts.PINKY:
                 this.target = new Point(0, Screen.getTileSize());
@@ -234,9 +258,9 @@ public class Ghost extends Element {
         }
     }
 
-    private void frightenedTargetCalculator(){
-        target.x=Services.getRandomInt(0,Screen.getScreenWidth());
-        target.y=Services.getRandomInt(0,Screen.getScreenHeight());
+    private void frightenedTargetCalculator() {
+        target.x = Services.getRandomInt(0, Screen.getScreenWidth());
+        target.y = Services.getRandomInt(0, Screen.getScreenHeight());
     }
 
     private void eatenTargetCalculator() {
@@ -244,8 +268,8 @@ public class Ghost extends Element {
         target.y = Map.getGhostsStartY();
     }
 
-    private Point calculateAmbush(PacMan pacMan,int distance){
-       return switch (pacMan.getDirection()) {
+    private Point calculateAmbush(PacMan pacMan, int distance) {
+        return switch (pacMan.getDirection()) {
             case Consts.RIGHT ->
                     new Point(pacMan.getPixelPositionX() + distance * Screen.getTileSize(), pacMan.getPixelPositionY());
             case Consts.LEFT ->
@@ -257,5 +281,5 @@ public class Ghost extends Element {
             default -> target;
         };
     }
-    
+
 }

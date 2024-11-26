@@ -37,7 +37,6 @@ public class GamePanel extends Panel implements Runnable, KeyListener {
     public void run() {
 
         strait();
-        pacMan.beat();
         repaint();
 
     }
@@ -71,9 +70,10 @@ public class GamePanel extends Panel implements Runnable, KeyListener {
         return gameThread;
     }
 
-    public void setData(PacMan pacMan, Arrays<Ghost> ghosts) {
+    public void print(PacMan pacMan, Arrays<Ghost> ghosts) {
         this.pacMan = pacMan;
         this.ghosts = ghosts;
+        this.run();
     }
     public void endLevel() {
         endLevel = !endLevel;
@@ -147,6 +147,10 @@ public class GamePanel extends Panel implements Runnable, KeyListener {
             return Consts.SPACE;
         }
         return 0;
+    }
+
+    public void setDirection(){
+        up=down=left=right=space=false;
     }
 
 }

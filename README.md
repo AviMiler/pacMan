@@ -19,3 +19,4 @@ The game showcases skills in backend programming, OOP, and game logic design.
 - **File I/O**: Loading and saving game states.
 ## run the game
 To run the game, download the files, open the Main file and run
+**importent** only the play button work

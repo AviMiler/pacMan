@@ -19,7 +19,7 @@ public class PacMan extends Element {
         pictureType = type;
         state = 0;
         life =2;
-        imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\pacMan\\";
+        imagesPath = "res\\pacMan\\";
         setImage(0);
         score = 0;
         beat = 0;

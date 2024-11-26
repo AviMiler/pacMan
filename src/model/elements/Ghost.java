@@ -23,7 +23,7 @@ public class Ghost extends Element {
         super(9 + type, 10);
         this.type = type;
         pictureType = type;
-        imagesPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\ghosts\\";
+        imagesPath = "res\\ghosts\\";
         setImage(0);
         this.speed = 2;
         this.eatable = false;

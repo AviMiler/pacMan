@@ -14,8 +14,8 @@ public class Map {
 
     private static Arrays<Arrays<Position>> map;
     private static Arrays<Position> listOfPositions;
-    private static final String mapElementsPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\mapElements\\";
-    private static final String mapPath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\maps\\map";
+    private static final String mapElementsPath = "res\\mapElements\\";
+    private static final String mapPath = "res\\maps\\map";
     private static Position prisePosition;
 
     public static void updateMap(){

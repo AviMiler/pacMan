@@ -29,13 +29,11 @@ public class GameLoop{
 
     public void startGame() {
 
-        LinkedList<ScoreUnit> scoresList = DataBaseHandler.readScoresFromFile();
-
         gameTime=0;
         Map.updateMap();
         Screen.updateScreen();
         panel=Window.startWindow();
-        if (panel==null) return;
+        if (panel==null) {endGame(3);return;}
         panel.setFocusable(true);
         panel.requestFocus();
 
@@ -58,10 +56,15 @@ public class GameLoop{
                 betweenLevels();
         }
 
-        panel = Window.replacePanel(panel,new EndGamePanel());
-        ((EndGamePanel)panel).endGame(scoresList,pacMan);
-        panel.repaint();
+        endGame(0);
 
+    }
+
+    private void endGame(int n) {
+
+        panel = Window.replacePanel(panel,new EndGamePanel(n));
+        ((EndGamePanel)panel).endGame(pacMan);
+        panel.repaint();
     }
 
     private void theGame() {

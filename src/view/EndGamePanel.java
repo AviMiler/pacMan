@@ -17,7 +17,7 @@ import java.awt.event.KeyListener;
 
 public class EndGamePanel extends Panel implements KeyListener {
 
-    int choice = 0;
+    int choice;
     boolean endGame=false,gameOver=false,newScore=false;
     LinkedList<ScoreUnit> scoresList;
     PacMan pacMan;
@@ -27,13 +27,14 @@ public class EndGamePanel extends Panel implements KeyListener {
     JButton button1 = createStyledButton("NEXT",345,Color.BLUE);
     JButton button2 = createStyledButton("END",400,Color.RED);
 
-    public EndGamePanel() {
+    public EndGamePanel(int choice) {
         super();
         this.revalidate();
         this.setLayout(null);
         setButtons();
         setVisible(true);
         this.addKeyListener(this);
+        this.choice=choice;
 
     }
 
@@ -41,6 +42,7 @@ public class EndGamePanel extends Panel implements KeyListener {
 
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
+
         switch (choice) {
             case 0:
                 Printer.printEndGame(graphics2D, endGame, gameOver);
@@ -70,16 +72,17 @@ public class EndGamePanel extends Panel implements KeyListener {
         }
     }
 
-    public void endGame(LinkedList<ScoreUnit> scoresList,PacMan pacMan){
+    public void endGame(PacMan pacMan){
 
-        this.pacMan=pacMan;
-        this.scoresList = scoresList;
-        if (pacMan.getLife()>0)
-            this.endGame = true;
-        else
-            this.gameOver = true;
-        scoreUnit = HandleScores.addScore(scoresList,new ScoreUnit("t",pacMan.getScore()));
-        this.repaint();
+        if (pacMan!=null) {
+            this.pacMan = pacMan;
+
+            if (pacMan.getLife() > 0)
+                this.endGame = true;
+            else
+                this.gameOver = true;
+            scoreUnit = HandleScores.addScore(scoresList, new ScoreUnit("t", pacMan.getScore()));
+        }
     }
 
     public void readName(String note,boolean delete) {

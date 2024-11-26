@@ -1,5 +1,10 @@
 package view;
 
+import data.DB.DataBaseHandler;
+import data.DB.ScoreUnit;
+import data.ineerDB.Arrays;
+import data.ineerDB.LinkedList;
+
 import javax.swing.*;
 
 public class Window {
@@ -30,11 +35,10 @@ public class Window {
                 choicePanel = new GamePanel();
                 break;
             case 2:
-                //choicePanel = new ScoresPanel();
+                choicePanel = null;
                 break;
             case 3:
-                choicePanel=null;
-                close();
+                choicePanel = null;
                 break;
         }
     }

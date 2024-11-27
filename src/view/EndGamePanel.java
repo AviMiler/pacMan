@@ -5,6 +5,7 @@ import data.DB.DataBaseHandler;
 import data.DB.ScoreUnit;
 import data.HandleScores;
 import data.ineerDB.LinkedList;
+import main.Main;
 import model.Map;
 import model.elements.PacMan;
 
@@ -24,18 +25,24 @@ public class EndGamePanel extends Panel implements KeyListener {
     String name="",note="";
     boolean delete;
     ScoreUnit scoreUnit = null;
-    JButton button1 = createStyledButton("NEXT",345,Color.BLUE);
-    JButton button2 = createStyledButton("END",400,Color.RED);
+    JButton button1;
+    JButton button2;
+    JButton button3;
 
     public EndGamePanel(int choice) {
         super();
         this.revalidate();
         this.setLayout(null);
+        button1 = createStyledButton("NEXT",Screen.getScreenWidth()/4, 5*Screen.getScreenHeight() / 7,Screen.getScreenWidth()/2, Color.GREEN);
+        button2 = createStyledButton("EXIT",Screen.getScreenWidth()/4, 5*Screen.getScreenHeight() / 7,Screen.getScreenWidth()/4, Color.RED);
+        button3 = createStyledButton("RESTART",Screen.getScreenWidth()/2, 5*Screen.getScreenHeight() / 7,Screen.getScreenWidth()/4, Color.GREEN);
         setButtons();
         setVisible(true);
         this.addKeyListener(this);
         this.choice=choice;
-
+        scoresList = DataBaseHandler.readScoresFromFile();
+        if (choice!=0)
+            repaint();
     }
 
     public void paintComponent(Graphics g) {
@@ -45,22 +52,23 @@ public class EndGamePanel extends Panel implements KeyListener {
 
         switch (choice) {
             case 0:
+                add(button1);
                 Printer.printEndGame(graphics2D, endGame, gameOver);
                 break;
             case 1:
                 if (scoreUnit != null) {
                     Printer.printGotRecord(graphics2D, name);
                     this.requestFocusInWindow();
-                    repaint();
                     scoreUnit.setName(name);
                     break;
                 } else {
                     choice = 2;
                 }
             case 2:
+                remove(button1);
+                add(button2);
+                add(button3);
                 DataBaseHandler.saveScoresListToFile(scoresList);
-                button1.setText("EXIT");
-                this.add(button2);
                 Printer.printScoresList(graphics2D, scoresList);
                 break;
             case 3:
@@ -68,8 +76,12 @@ public class EndGamePanel extends Panel implements KeyListener {
                 break;
             case 4:
                 Window.close();
-            case 100:
+                break;
+            case 5:
+                Main.startGame();
+                return;
         }
+        repaint();
     }
 
     public void endGame(PacMan pacMan){
@@ -83,6 +95,7 @@ public class EndGamePanel extends Panel implements KeyListener {
                 this.gameOver = true;
             scoreUnit = HandleScores.addScore(scoresList, new ScoreUnit("t", pacMan.getScore()));
         }
+
     }
 
     public void readName(String note,boolean delete) {
@@ -102,10 +115,12 @@ public class EndGamePanel extends Panel implements KeyListener {
 
     /////////////////////////////button handler//////////////////////////////
 
-    private JButton createStyledButton(String text,int y, Color backgroundColor) {
-        JButton button = new JButton(text);
-        button.setBounds(Screen.getScreenWidth()/4, y,Screen.getScreenWidth()/2, Screen.getScreenHeight()/7);
+    private JButton createStyledButton(String text,int x,int y,int width, Color backgroundColor) {
+
+        JButton button = new JButton();
+        button.setBounds(x, y,width, Screen.getScreenHeight()/7);
         button.setBackground(backgroundColor);
+        button.setText(text);
         button.setForeground(Color.BLACK);
         button.setFont(Screen.customFont);
         button.setFocusPainted(false);
@@ -113,26 +128,38 @@ public class EndGamePanel extends Panel implements KeyListener {
         return button;
     }
 
+    private void setStyledButton(String text,int x,int y,int width, Color backgroundColor, JButton button) {
+
+        button.setBounds(x, y,width, Screen.getScreenHeight()/7);
+        button.setBackground(backgroundColor);
+        button.setText(text);
+        button.setForeground(Color.BLACK);
+        button.setFont(Screen.customFont);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
+
+    }
+
     private void setButtons() {
-        button1 = createStyledButton("NEXT", 5*Screen.getScreenHeight() / 7, Color.GREEN);
-        button2 = createStyledButton("RESTART", 5*Screen.getScreenHeight() / 8, Color.RED);
 
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                choice++;
-                repaint();
+                choice++;//next
             }
         });
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                choice=100;
-                repaint();
+                choice++;//exit
             }
         });
-
-        this.add(button1);
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                choice=5;//restart
+            }
+        });
     }
 
     /////////////////////////////keyFunctions////////////////////////////////

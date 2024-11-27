@@ -18,13 +18,14 @@ public class PacMan extends Element {
         type = 1;
         pictureType = type;
         state = 0;
-        life =2;
+        life = 0;
         imagesPath = "res\\pacMan\\";
         setImage(0);
         score = 0;
         beat = 0;
         collisionMargin = 0;
         ghostEatenCnt = 1;
+        direction=0;
 
     }
 

@@ -1,9 +1,5 @@
 package control;
 
-import data.DB.DataBaseHandler;
-import data.DB.ScoreUnit;
-import data.HandleScores;
-import data.ineerDB.LinkedList;
 import model.elements.Ghost;
 import model.elements.PacMan;
 import services.Consts;
@@ -11,8 +7,6 @@ import data.ineerDB.Arrays;
 import services.Timer;
 import view.*;
 import model.*;
-
-import javax.swing.*;
 
 public class GameLoop{
 
@@ -23,17 +17,14 @@ public class GameLoop{
     private static int gameTime;
     private static int numOfPrise;
     private static int level;
-    private static Panel panel;
+    private static GamePanel panel;
     private static int numOfGhostsReleased = 1;
     private static int numOfGhostsToReleased = 0;
 
-    public void startGame() {
+    public static void startGame() {
 
         gameTime=0;
-        Map.updateMap();
-        Screen.updateScreen();
-        panel=Window.startWindow();
-        if (panel==null) {endGame(3);return;}
+        panel = (GamePanel) Window.getPanel();
         panel.setFocusable(true);
         panel.requestFocus();
 
@@ -55,23 +46,17 @@ public class GameLoop{
             if (pacMan.getLife()>0)
                 betweenLevels();
         }
-
-        endGame(0);
-
+        EndGamePanel endGamePanel = new EndGamePanel(0);
+        endGamePanel.endGame(pacMan);
+        Window.setPanel(endGamePanel);
+        endGamePanel.repaint();
     }
 
-    private void endGame(int n) {
-
-        panel = Window.replacePanel(panel,new EndGamePanel(n));
-        ((EndGamePanel)panel).endGame(pacMan);
-        panel.repaint();
-    }
-
-    private void theGame() {
+    private static void theGame() {
 
         boolean start = true;
 
-        while (((GamePanel) panel).getGameThread() != null && pacMan.getLife() > 0) {
+        while (panel.getGameThread() != null && pacMan.getLife() > 0) {
 
             if (numOfPrise <= 0)
                 return;
@@ -79,27 +64,27 @@ public class GameLoop{
             freeGhostsManager();
             Timer.waitFor();
 
-            ((GamePanel) panel).print(pacMan, ghosts);
+            panel.print(pacMan, ghosts);
 
             if (start) {start=false;Timer.waitFor(3);}
 
-            update((GamePanel) panel);
+            update(panel);
         }
     }
 
-    private void betweenLevels() {
+    private static void betweenLevels() {
 
         numOfPrise = 0;
         Map.updateMap();
         pacMan.addLife();
-        ((GamePanel) panel).endLevel();
-        while (((GamePanel) panel).getDirection() != Consts.SPACE) {
+        panel.endLevel();
+        while (panel.getDirection() != Consts.SPACE) {
             panel.repaint();
         }
 
     }
 
-    private void update(GamePanel gamePanel) {
+    private static void update(GamePanel gamePanel) {
 
         updateTimes();
         PositionsControl.updatePrise(pacMan,ghosts);
@@ -117,11 +102,12 @@ public class GameLoop{
             ghosts = Ghost.initializeGhostList();
             for (int i = 0; i < 3; i++) {//simulation
                 pacMan.changeImage();
-                ((GamePanel)panel).print(pacMan, ghosts);
+                panel.print(pacMan, ghosts);
                 Timer.waitFor(1);
             }
             pacMan.setImage(0);
             numOfGhostsToReleased=0;
+            panel.setDirection();
         }
     }
 
@@ -192,7 +178,7 @@ public class GameLoop{
         return 0;
     }
 
-    private void updateTimes() {
+    private static void updateTimes() {
 
         gameTime++;
         if (priseTimeToEnd > 0)

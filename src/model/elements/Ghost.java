@@ -1,6 +1,7 @@
 package model.elements;
 
 import control.Collisions;
+import control.GameLoop;
 import model.Map;
 import services.Consts;
 import data.ineerDB.Arrays;
@@ -66,7 +67,6 @@ public class Ghost extends Element {
             switch (mode) {
                 case Consts.EATEN:
                     if (Collisions.isTouching(this, new Element(12, 8))) {
-                        System.out.println("dd");
                         setToChaseMode();
                     }
                     break;
@@ -145,9 +145,10 @@ public class Ghost extends Element {
         Point nextPosition2;
 
         if (released && Map.getMap().get(getIndexPositionY()-1).get(getIndexPositionX()).isGate()) {
-            direction = Consts.UP;
             released=false;
             isReleased = true;
+            setMode(GameLoop.getGhostMode());
+            direction = Consts.UP;
         } else if (!possibleDirections.isEmpty()) {
             nextPosition1 = setPixelPosition(this, possibleDirections.get(0));
             this.direction = possibleDirections.get(0);

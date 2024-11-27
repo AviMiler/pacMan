@@ -16,7 +16,7 @@ public class Screen {
 
     static {
         try {
-            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\font\\ARCADE_N.TTF")).deriveFont(24f);
+            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("res\\font\\ARCADE_N.TTF")).deriveFont(24f);
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }

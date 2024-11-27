@@ -1,4 +1,5 @@
 package view;
+import control.GameLoop;
 import model.Map;
 
 import javax.swing.*;
@@ -18,6 +19,30 @@ public class MenuPanel extends Panel {
         setVisible(true);
 
     }
+
+    public int getChoice() {
+        while (choice == 0){
+            System.out.print("");
+        }
+        return choice;
+    }
+
+    public Panel panelSelector (int choice){
+        return switch (choice) {
+            case 1 -> new GamePanel();
+            case 2 -> new EndGamePanel(2);
+            case 3 -> new EndGamePanel(4);
+            default -> new MenuPanel();
+        };
+    }
+
+    public void moveToChoice(){
+        Window.setPanel(panelSelector(getChoice()));
+        if (choice==1) {
+            GameLoop.startGame();
+        }
+    }
+
     private void setButtons(){
         JButton button1 = createStyledButton("Play", Screen.getScreenHeight()/7, Color.GREEN);
         JButton button2 = createStyledButton("Scores", (Screen.getScreenHeight()/7)*3, Color.YELLOW);
@@ -49,12 +74,7 @@ public class MenuPanel extends Panel {
         this.add(button3);
 
     }
-    public int getChoice() {
-        while (choice == 0){
-            System.out.print("");
-        }
-        return choice;
-    }
+
     private JButton createStyledButton(String text,int y, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setBounds(Screen.getScreenWidth()/4, y,Screen.getScreenWidth()/2, Screen.getScreenHeight()/7);
@@ -65,4 +85,5 @@ public class MenuPanel extends Panel {
         button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
         return button;
     }
+
 }

@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
 
 public class DataBaseHandler {
 
-    private static final String scorePath = "C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\data\\highScores\\highScors";
+    private static final String scorePath = "res\\data\\highScores\\highScors";
 
     public static LinkedList<ScoreUnit> readScoresFromFile(){
 

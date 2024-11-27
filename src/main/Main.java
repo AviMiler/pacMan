@@ -3,10 +3,7 @@ package main;
 import model.Map;
 import model.elements.Element;
 import control.GameLoop;
-import view.GamePanel;
-import view.MenuPanel;
-import view.Screen;
-import view.Window;
+import view.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,9 +17,5 @@ public class Main {
         MenuPanel menuPanel = (MenuPanel) Window.startWindow();
         menuPanel.moveToChoice();
     }
-    public static void restartGame() {
-        MenuPanel menuPanel = new MenuPanel();
-        Window.setPanel(menuPanel);
-        menuPanel.moveToChoice();
-    }
+
 }

@@ -6,6 +6,7 @@ import data.ineerDB.Arrays;
 import data.ineerDB.LinkedList;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Window {
 
@@ -36,6 +37,10 @@ public class Window {
 
     public static Panel getPanel() {
         return Window.panel;
+    }
+
+    public static void removeAll() {
+        window.removeAll();
     }
 
     public static void close(){

@@ -65,21 +65,16 @@ public class Ghost extends Element {
 
         if (isReleased) {
             switch (mode) {
-                case Consts.EATEN:
-                    if (Collisions.isTouching(this, new Element(12, 8))) {
-                        setToChaseMode();
-                    }
-                    break;
                 case Consts.FRIGHTENED:
                     if (state != Consts.FRIGHTENED)
                         setToFrightenMode();
                     break;
                 case Consts.CHASE:
-                    if (state != Consts.CHASE)
+                    if (state != Consts.CHASE && state != Consts.EATEN)
                         setToChaseMode();
                     break;
                 case Consts.SCATTER:
-                    if (state != Consts.SCATTER)
+                    if (state != Consts.SCATTER && state != Consts.EATEN)
                         setToScatterMode();
                     break;
             }
@@ -134,6 +129,14 @@ public class Ghost extends Element {
     public void release() {
         if (!isReleased) {
             released = true;
+        }
+    }
+
+    public void isBackFromEaten(){
+        if (this.state == Consts.EATEN){
+            if (Map.getMap().get(this.getIndexPositionY()+1).get(this.getIndexPositionX()).isGate()) {
+                setToChaseMode();
+            }
         }
     }
     //////////////////////////////direction calculator//////////////////////////////

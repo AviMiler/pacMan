@@ -72,13 +72,17 @@ public class EndGamePanel extends Panel implements KeyListener {
                 Printer.printScoresList(graphics2D, scoresList);
                 break;
             case 3:
+                add(button2);
+                add(button3);
                 Printer.printBye(graphics2D);
                 break;
             case 4:
                 Window.close();
                 break;
             case 5:
-                Main.startGame();
+                MenuPanel menuPanel = new MenuPanel();
+                Window.setPanel(menuPanel);
+                menuPanel.repaint();
                 return;
         }
         repaint();

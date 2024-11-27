@@ -1,6 +1,7 @@
 package view;
 import control.GameLoop;
 import model.Map;
+import services.Services;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +10,12 @@ import java.awt.event.ActionListener;
 
 public class MenuPanel extends Panel {
 
-    int choice = 0;
+    int choice;
 
     public MenuPanel() {
 
         super();
+        choice = 0;
         this.setLayout(null);
         setButtons();
         setVisible(true);
@@ -30,8 +32,7 @@ public class MenuPanel extends Panel {
     public Panel panelSelector (int choice){
         return switch (choice) {
             case 1 -> new GamePanel();
-            case 2 -> new EndGamePanel(2);
-            case 3 -> new EndGamePanel(4);
+            case 3 -> new EndGamePanel(3);
             default -> new MenuPanel();
         };
     }
@@ -39,6 +40,7 @@ public class MenuPanel extends Panel {
     public void moveToChoice(){
         Window.setPanel(panelSelector(getChoice()));
         if (choice==1) {
+            System.out.println(1);
             GameLoop.startGame();
         }
     }
@@ -58,14 +60,15 @@ public class MenuPanel extends Panel {
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                choice = 2;
+                Window.setPanel(new EndGamePanel(2));
             }
         });
 
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                choice = 3;
+                Window.setPanel(new EndGamePanel(3));
+                choice=3;
             }
         });
 
@@ -84,6 +87,10 @@ public class MenuPanel extends Panel {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
         return button;
+    }
+
+    public void test(){
+        choice=3;
     }
 
 }

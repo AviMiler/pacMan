@@ -79,6 +79,7 @@ public class PositionsControl {
         for (int i = 0; i < ghosts.size(); i++) {
             Ghost ghost = ghosts.get(i);
             ghost.beat();
+            ghost.isBackFromEaten();
             ghost.targetCalculator(pacMan,ghosts.get(0));
             ghost.calculateDirection(ghost.getTarget());
             ghost.setPixelPosition(ghost.getDirection());

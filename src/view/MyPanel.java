@@ -3,9 +3,9 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class Panel extends JPanel {
+public class MyPanel extends JPanel {
 
-    public Panel() {
+    public MyPanel() {
         this.setPreferredSize(new Dimension(Screen.getScreenWidth(),Screen.getScreenHeight()));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);

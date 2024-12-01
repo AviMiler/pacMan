@@ -1,7 +1,5 @@
 package model.elements;
 
-import javax.swing.*;
-
 import model.Map;
 import services.Consts;
 import view.Screen;
@@ -18,7 +16,7 @@ public class PacMan extends Element {
         type = 1;
         pictureType = type;
         state = 0;
-        life = 2;
+        life = 3;
         imagesPath = "res\\pacMan\\";
         setImage(0);
         score = 0;
@@ -31,6 +29,15 @@ public class PacMan extends Element {
 
     public int getLife() {
         return life;
+    }
+
+    private void strait() {
+        if (getDirection()==Consts.UP || getDirection()==Consts.DOWN) {
+            this.straitX();
+        }
+        if (getDirection()==Consts.LEFT || getDirection()==Consts.RIGHT) {
+            this.straitY();
+        }
     }
 
     public void addLife() {

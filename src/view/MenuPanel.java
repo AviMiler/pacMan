@@ -1,81 +1,46 @@
 package view;
-import control.GameLoop;
-import model.Map;
-import services.Services;
 
+import control.GameLoop;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class MenuPanel extends Panel {
-
-    int choice;
+public class MenuPanel extends MyPanel {
 
     public MenuPanel() {
 
         super();
-        choice = 0;
         this.setLayout(null);
         setButtons();
         setVisible(true);
 
     }
 
-    public int getChoice() {
-        while (choice == 0){
-            System.out.print("");
-        }
-        return choice;
-    }
-
-    public Panel panelSelector (int choice){
-        return switch (choice) {
-            case 1 -> new GamePanel();
-            case 3 -> new EndGamePanel(3);
-            default -> new MenuPanel();
-        };
-    }
-
-    public void moveToChoice(){
-        Window.setPanel(panelSelector(getChoice()));
-        if (choice==1) {
-            System.out.println(1);
-            GameLoop.startGame();
-        }
-    }
-
     private void setButtons(){
+
         JButton button1 = createStyledButton("Play", Screen.getScreenHeight()/7, Color.GREEN);
         JButton button2 = createStyledButton("Scores", (Screen.getScreenHeight()/7)*3, Color.YELLOW);
         JButton button3 = createStyledButton("Exit", (Screen.getScreenHeight()/7)*5, Color.RED);
 
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                choice = 1;
-            }
-        });
 
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Window.setPanel(new EndGamePanel(2));
-            }
-        });
-
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Window.setPanel(new EndGamePanel(3));
-                choice=3;
-            }
-        });
+        button1.addActionListener(_ -> b1());
+        button2.addActionListener(_ -> b2());
+        button3.addActionListener(_ -> b3());
 
         this.add(button1);
         this.add(button2);
         this.add(button3);
 
+    }
+
+    private void b1(){
+        Window.setPanel(new GamePanel());
+        new Thread(GameLoop::startGame).start();
+    }
+    private void b2(){
+        Window.setPanel(new EndGamePanel(2));
+    }
+    private void b3(){
+        Window.setPanel(new EndGamePanel(3));
     }
 
     private JButton createStyledButton(String text,int y, Color backgroundColor) {
@@ -87,10 +52,6 @@ public class MenuPanel extends Panel {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
         return button;
-    }
-
-    public void test(){
-        choice=3;
     }
 
 }

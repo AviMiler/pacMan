@@ -188,6 +188,13 @@ public class Element implements ElementInterface{
         this.straitY();
     }
 
+    public void straitXOrY(){
+        if (this.direction == Consts.UP || this.direction == Consts.DOWN)
+            this.straitX();
+        if (this.direction == Consts.LEFT || this.direction == Consts.RIGHT)
+            this.straitY();
+    }
+
     public void setImage(int direction) {
 
         String [] directions = {"0","R","D","L","U","E","F","nothing"};

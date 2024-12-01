@@ -1,19 +1,13 @@
 package view;
 
-import data.DB.DataBaseHandler;
-import data.DB.ScoreUnit;
-import data.ineerDB.Arrays;
-import data.ineerDB.LinkedList;
-
 import javax.swing.*;
-import java.awt.*;
 
 public class Window {
 
     static JFrame window;
-    static Panel panel;
+    static MyPanel panel;
 
-    public static Panel startWindow() {
+    public static void startWindow() {
 
         window = new JFrame();
         panel = new MenuPanel();
@@ -25,26 +19,22 @@ public class Window {
         window.add(panel);
         window.pack();
 
-        return panel;
     }
 
-    public static void setPanel(Panel panel) {
+    public static void setPanel(MyPanel panel) {
         window.remove(Window.panel);
         window.add(panel);
         window.pack();
+        window.revalidate();
+        window.repaint();
         Window.panel = panel;
     }
 
-    public static Panel getPanel() {
+    public static MyPanel getPanel() {
         return Window.panel;
     }
 
-    public static void removeAll() {
-        window.removeAll();
-    }
-
-    public static void close(){
+    public static void close() {
         window.dispose();
     }
-
 }

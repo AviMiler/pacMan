@@ -1,12 +1,10 @@
 package view;
 
-import control.GameLoop;
 import data.DB.DataBaseHandler;
 import data.DB.ScoreUnit;
 import data.HandleScores;
 import data.ineerDB.LinkedList;
 import main.Main;
-import model.Map;
 import model.elements.PacMan;
 
 import javax.swing.*;
@@ -16,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class EndGamePanel extends Panel implements KeyListener {
+public class EndGamePanel extends MyPanel implements KeyListener {
 
     int choice;
     boolean endGame=false,gameOver=false,newScore=false;
@@ -80,9 +78,7 @@ public class EndGamePanel extends Panel implements KeyListener {
                 Window.close();
                 break;
             case 5:
-                MenuPanel menuPanel = new MenuPanel();
-                Window.setPanel(menuPanel);
-                menuPanel.repaint();
+                Main.startGame();
                 return;
         }
         repaint();

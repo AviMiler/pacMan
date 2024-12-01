@@ -43,8 +43,6 @@ public class Collisions {
 
     public static boolean isTouching(Element a,Element b) {
 
-        //return a.getIndexPoint().x == b.getIndexPoint().x && a.getIndexPoint().y == b.getIndexPoint().y;
-
         int w = Screen.getTileSize();
         int x1 = a.getPixelPositionX();
         int y1 = a.getPixelPositionY();

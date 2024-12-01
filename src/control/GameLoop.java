@@ -18,16 +18,16 @@ public class GameLoop{
     private static int numOfPrise;
     private static int level;
     private static GamePanel panel;
-    private static int numOfGhostsReleased = 1;
-    private static int numOfGhostsToReleased = 0;
+    private static int numOfGhostsReleased;
+    private static int numOfGhostsToReleased;
 
     public static void startGame() {
 
         gameTime=0;
         panel = (GamePanel) Window.getPanel();
         panel.setFocusable(true);
+        panel.requestFocusInWindow();
         panel.requestFocus();
-
         pacMan = new PacMan();
 
         ///////////////////////the game loop//////////////////////////
@@ -40,6 +40,8 @@ public class GameLoop{
             Map.putPrise();
             startPriseTimeToEnd();
             startChaseTimer();
+            numOfGhostsReleased = 1;
+            numOfGhostsToReleased = 0;
 
             theGame();
 
@@ -54,22 +56,25 @@ public class GameLoop{
 
     private static void theGame() {
 
-        boolean start = true;
+            boolean start = true;
 
-        while (panel.getGameThread() != null && pacMan.getLife() > 0) {
+            while (pacMan.getLife() > 0) {
+                if (numOfPrise <= 0)
+                    return;
 
-            if (numOfPrise <= 0)
-                return;
+                freeGhostsManager();
+                Timer.waitFor();
 
-            freeGhostsManager();
-            Timer.waitFor();
+                panel.print(pacMan, ghosts);
 
-            panel.print(pacMan, ghosts);
+                if (start) {
+                    start = false;
+                    Timer.waitFor(3);
+                }
 
-            if (start) {start=false;Timer.waitFor(3);}
+                update(panel);
+            }
 
-            update(panel);
-        }
     }
 
     private static void betweenLevels() {

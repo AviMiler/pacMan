@@ -12,10 +12,11 @@ public class Main {
 
     }
     public static void startGame() {
+
         Map.updateMap();
         Screen.updateScreen();
-        MenuPanel menuPanel = (MenuPanel) Window.startWindow();
-        menuPanel.moveToChoice();
+        Window.startWindow();
+
     }
 
 }

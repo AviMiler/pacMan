@@ -17,7 +17,6 @@ public class Printer extends JPanel {
     static int m = Screen.getTileSize()*2;
 
     public static void printMap(Graphics2D g) {
-
         Image image;
         int screenX = 0, screenY = 0;
 
@@ -121,9 +120,22 @@ public class Printer extends JPanel {
         g.setColor(Color.WHITE);
         for (int i = scoresList.size()-1; i >= 0 ; i--) {
             ScoreUnit score = scoresList.get(i);
-            g.drawString(score.getName()+" "+score.getPoints(), 9*Screen.getTileSize(), 180+(j)*Screen.getTileSize());
+            if (score.getName().isEmpty())
+                score.setName("unknown");
+            if (score.getName().length()>8)
+                score.setName(score.getName().substring(0, 8));
+            g.drawString(score.getName()+dots(score.getName(),score.getPoints())+score.getPoints(), Map.getMap().get(0).size()/4*Screen.getTileSize(), 180+(j)*Screen.getTileSize());
             j++;
         }
+    }
+
+    private static String dots(String name,int num){
+
+        int numOfDots = Map.getMap().get(0).size()/2+3 - (name+num).length();
+        if (numOfDots<0)
+            numOfDots=0;
+        return  ".".repeat(numOfDots);
+
     }
 
     public static void printGotRecord(Graphics2D g,String name){

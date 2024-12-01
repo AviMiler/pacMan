@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jlink" name="pacMan">
+    <output-path>$PROJECT_DIR$/out/artifacts/pacMan</output-path>
+    <root id="root" />
+  </artifact>
+</component>

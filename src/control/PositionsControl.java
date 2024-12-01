@@ -11,8 +11,7 @@ public class PositionsControl {
     public static void updatePacMan(PacMan pacMan, GamePanel gamePanel) {
 
         pacMan.beat();
-
-        switch (gamePanel.getDirection()) {
+        switch (pacMan.getDirection()) {
             case Consts.UP:
                 if (!Collisions.isTouchWall(pacMan, Consts.UP)) {
                     pacMan.setPixelPosition(Consts.UP);
@@ -38,8 +37,8 @@ public class PositionsControl {
                 }
                 break;
         }
-        pacMan.setDirection(gamePanel.getDirection());
         pacMan.setImage(pacMan.getDirection());
+        pacMan.straitXOrY();
     }
 
     public static void updatePrise(Element element,Arrays<Ghost> ghosts) {

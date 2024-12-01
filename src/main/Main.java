@@ -18,5 +18,8 @@ public class Main {
         Window.startWindow();
 
     }
+    public static void restartGame() {
+        Window.setPanel(new MenuPanel());
+    }
 
 }

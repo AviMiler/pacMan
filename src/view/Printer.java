@@ -66,7 +66,7 @@ public class Printer extends JPanel {
     }
 
     private static void printLife(PacMan pacMan, Graphics2D g) {
-        Image image = new ImageIcon("C:\\Users\\User\\OneDrive\\מסמכים\\לימודים\\java\\IdeaProjects\\PacMan\\res\\info\\life.png").getImage();
+        Image image = new ImageIcon("res\\info\\life.png").getImage();
         for (int i = pacMan.getLife(); i > 0; i--) {
             g.drawImage(image,Screen.getScreenWidth()-i*(Screen.getTileSize()+10), 0,Screen.getTileSize(),Screen.getTileSize(),null);
         }

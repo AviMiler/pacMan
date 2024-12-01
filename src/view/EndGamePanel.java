@@ -78,7 +78,7 @@ public class EndGamePanel extends MyPanel implements KeyListener {
                 Window.close();
                 break;
             case 5:
-                Main.startGame();
+                Main.restartGame();
                 return;
         }
         repaint();

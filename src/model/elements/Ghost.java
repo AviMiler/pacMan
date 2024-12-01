@@ -21,6 +21,7 @@ public class Ghost extends Element {
     //////////////////////////////constructors//////////////////////////////
 
     public Ghost(int type) {
+
         super(9 + type, 10);
         this.type = type;
         pictureType = type;
@@ -89,7 +90,7 @@ public class Ghost extends Element {
             direction = 3;
         else if (direction == 3)
             direction = 1;
-        else if (direction == 4)
+        else if (direction == 4 && !isNowReleased())
             direction = 2;
         state = Consts.FRIGHTENED;
         pictureType = Consts.FRIGHTENED;
@@ -139,6 +140,12 @@ public class Ghost extends Element {
             }
         }
     }
+
+    private boolean isNowReleased() {
+        return Map.getMap().get(this.getIndexPositionY()+1).get(this.getIndexPositionX()).isGate()||
+                Map.getMap().get(this.getIndexPositionY()-1).get(this.getIndexPositionX()).isGate()||
+                Map.getMap().get(this.getIndexPositionY()).get(this.getIndexPositionX()).isGate();
+    }
     //////////////////////////////direction calculator//////////////////////////////
 
     public void calculateDirection(Point target) {
@@ -150,8 +157,8 @@ public class Ghost extends Element {
         if (released && Map.getMap().get(getIndexPositionY()-1).get(getIndexPositionX()).isGate()) {
             released=false;
             isReleased = true;
-            setMode(GameLoop.getGhostMode());
             direction = Consts.UP;
+            setMode(GameLoop.getGhostMode());
         } else if (!possibleDirections.isEmpty()) {
             nextPosition1 = setPixelPosition(this, possibleDirections.get(0));
             this.direction = possibleDirections.get(0);

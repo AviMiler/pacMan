@@ -1,41 +1,35 @@
 package model.elements;
 
-import services.Consts;
-import view.Screen;
-
-import javax.swing.*;
 import java.awt.*;
 
 public interface ElementInterface {
 
-    public Point getIndexPoint();
-    public Point getPixelPoint();
+    Point getIndexPoint();
 
-    public Image getImage();
+    Point getPixelPoint();
 
-    public int getScore();
-    public int getType();
+    Image getImage();
 
-    public int getSpeed();
+    int getScore();
 
-    public int getSize();
+    int getType();
 
-    public String getImagesPath();
+    int getSpeed();
 
-    public void setIndexPositionX(int x);
-    public void setIndexPositionY(int y);
+    int getSize();
 
-    public void setPixelPosition(int dir);
+    String getImagesPath();
 
-    public void straitX();
-    public void straitY();
+    void setPixelPosition(int dir);
 
-    public void setImage(int direction);
+    void straitX();
 
-    public void beat();
+    void straitY();
 
-    public void updateScore(int score);
+    void setImage(int direction);
 
-    public void upSpeed();
+    void beat();
+
+    void updateScore(int score);
 
 }

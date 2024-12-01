@@ -18,7 +18,7 @@ public class Map {
     private static final String mapPath = "res\\maps\\map";
     private static Position prisePosition;
 
-    public static void updateMap(){
+    public static void updateMap() {
 
         map = new Arrays<>();
         listOfPositions = new Arrays<>();
@@ -26,16 +26,16 @@ public class Map {
 
     }
 
-    public static Arrays<Arrays<Position>> getMap(){
+    public static Arrays<Arrays<Position>> getMap() {
         return map;
     }
 
-    public static void putPrise(){
-        prisePosition = listOfPositions.get(Services.getRandomInt(0,listOfPositions.size()-1));
+    public static void putPrise() {
+        prisePosition = listOfPositions.get(Services.getRandomInt(0, listOfPositions.size() - 1));
         prisePosition.setPrise(-1);
     }
 
-    public static void deletePrise(){
+    public static void deletePrise() {
         if (prisePosition != null) {
             if (!prisePosition.wasCoin())
                 prisePosition.deletePrise();
@@ -44,71 +44,55 @@ public class Map {
         }
     }
 
-    public static Position getPrisePosition(){
+    public static Position getPrisePosition() {
         return prisePosition;
     }
 
-    public static int getTilesWidth(){
+    public static int getTilesWidth() {
         return map.get(0).size();
     }
-    public static int getTilesHeight(){
+
+    public static int getTilesHeight() {
         return map.size();
     }
 
-    public static int getIndexPMStartX(){
-        return map.get(0).size()/2;
+    public static int getIndexPMStartX() {
+        return map.get(0).size() / 2;
     }
-    public static int getIndexPMStartY(){
-        return map.size()-2;
+
+    public static int getIndexPMStartY() {
+        return map.size() - 2;
     }
 
 
-
-    public static int getGhostsStartX(){
-        return 10*Screen.getTileSize();
-    }
-    public static int getGhostsStartY(){
-        return 11*Screen.getTileSize();
+    public static int getGhostsStartX() {
+        return 10 * Screen.getTileSize();
     }
 
-    public static int getPriseX(){
-        return map.get(0).size()/2;
-    }
-    public static int getPriseY(){
-        return map.size()/2;
+    public static int getGhostsStartY() {
+        return 11 * Screen.getTileSize();
     }
 
-    public static int getPixelsWidth(){
-        return map.get(0).size()* Screen.getTileSize();
-    }
-    public static int getPixelsHeight(){
-        return map.size()*Screen.getTileSize();
+    public static int getPixelsWidth() {
+        return map.get(0).size() * Screen.getTileSize();
     }
 
-    public static String getMapElementPath(){
+    public static String getMapElementPath() {
         return mapElementsPath;
     }
 
-    public static String getMapPath(){
-        return mapPath;
-    }
-
-    public static Position getPositionAt(int y, int x){
+    public static Position getPositionAt(int y, int x) {
         return map.get(y).get(x);
     }
 
-    public static Position getStartPrisePosition(){
-        return map.get(getPriseY()).get(getPriseX());
-    }
-
-    private static Arrays<Arrays<Integer>> readMap(){
+    private static Arrays<Arrays<Integer>> readMap() {
 
         Arrays<Arrays<Integer>> map = new Arrays<>();
         try {
 
             BufferedReader br = new BufferedReader(new FileReader(mapPath));
             String s;
-            while ((s = br.readLine())!=null) {
+            while ((s = br.readLine()) != null) {
 
                 map.add(convertStringsToInts(s));
 
@@ -127,34 +111,32 @@ public class Map {
         for (int i = 0; i < map0.size(); i++) {
             map.add(new Arrays<>());
             for (int j = 0; j < map0.get(i).size(); j++) {
-                if (map0.get(i).get(j) == 0){
-                    position = new Position(true,false, 0);
+                if (map0.get(i).get(j) == 0) {
+                    position = new Position(true, false, 0);
                 } else if (map0.get(i).get(j) == 1) {
-                    position = new Position(false,false, 0);
+                    position = new Position(false, false, 0);
                     GameLoop.addToPriseCnt();
-                }else if (map0.get(i).get(j) == 3) {
-                    position = new Position(false, false,1);
+                } else if (map0.get(i).get(j) == 3) {
+                    position = new Position(false, false, 1);
                     GameLoop.addToPriseCnt();
-                }
-                else if (map0.get(i).get(j) == 2) {
-                    position = new Position(false, false,-2);
-                }
-                else{
-                    position = new Position(false,true,0);
+                } else if (map0.get(i).get(j) == 2) {
+                    position = new Position(false, false, -2);
+                } else {
+                    position = new Position(false, true, 0);
                 }
                 map.get(i).add(position);
-                if (position.isPath() && position.isPrise()){//enter to position that can put a prise
+                if (position.isPath() && position.isPrise()) {//enter to position that can put a price
                     listOfPositions.add(position);
                 }
             }
         }
     }
 
-    private static Arrays<Integer> convertStringsToInts(String s){
+    private static Arrays<Integer> convertStringsToInts(String s) {
         String[] arr = s.split(" ");
         Arrays<Integer> ints = new Arrays<>();
-        for (int i = 0; i < arr.length; i++) {
-            ints.add(Integer.parseInt(arr[i]));
+        for (String string : arr) {
+            ints.add(Integer.parseInt(string));
         }
         return ints;
     }

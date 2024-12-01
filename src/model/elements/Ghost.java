@@ -133,17 +133,17 @@ public class Ghost extends Element {
         }
     }
 
-    public void isBackFromEaten(){
-        if (this.state == Consts.EATEN){
-            if (Map.getMap().get(this.getIndexPositionY()+1).get(this.getIndexPositionX()).isGate()) {
+    public void isBackFromEaten() {
+        if (this.state == Consts.EATEN) {
+            if (Map.getMap().get(this.getIndexPositionY() + 1).get(this.getIndexPositionX()).isGate()) {
                 setToChaseMode();
             }
         }
     }
 
     private boolean isNowReleased() {
-        return Map.getMap().get(this.getIndexPositionY()+1).get(this.getIndexPositionX()).isGate()||
-                Map.getMap().get(this.getIndexPositionY()-1).get(this.getIndexPositionX()).isGate()||
+        return Map.getMap().get(this.getIndexPositionY() + 1).get(this.getIndexPositionX()).isGate() ||
+                Map.getMap().get(this.getIndexPositionY() - 1).get(this.getIndexPositionX()).isGate() ||
                 Map.getMap().get(this.getIndexPositionY()).get(this.getIndexPositionX()).isGate();
     }
     //////////////////////////////direction calculator//////////////////////////////
@@ -154,8 +154,8 @@ public class Ghost extends Element {
         Point nextPosition1;
         Point nextPosition2;
 
-        if (released && Map.getMap().get(getIndexPositionY()-1).get(getIndexPositionX()).isGate()) {
-            released=false;
+        if (released && Map.getMap().get(getIndexPositionY() - 1).get(getIndexPositionX()).isGate()) {
+            released = false;
             isReleased = true;
             direction = Consts.UP;
             setMode(GameLoop.getGhostMode());

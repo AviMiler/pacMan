@@ -23,21 +23,12 @@ public class PacMan extends Element {
         beat = 0;
         collisionMargin = 0;
         ghostEatenCnt = 1;
-        direction=0;
+        direction = 0;
 
     }
 
     public int getLife() {
         return life;
-    }
-
-    private void strait() {
-        if (getDirection()==Consts.UP || getDirection()==Consts.DOWN) {
-            this.straitX();
-        }
-        if (getDirection()==Consts.LEFT || getDirection()==Consts.RIGHT) {
-            this.straitY();
-        }
     }
 
     public void addLife() {
@@ -59,13 +50,13 @@ public class PacMan extends Element {
     public void setPosition() {
         this.setPixelPositionY(Map.getIndexPMStartY() * Screen.getTileSize());
         this.setPixelPositionX(Map.getIndexPMStartX() * Screen.getTileSize());
-        this.direction=0;
+        this.direction = 0;
     }
 
-    public void eaten(){
+    public void eaten() {
         removeLife();
         setImage(Consts.EATEN);
-        state=Consts.EATEN;
+        state = Consts.EATEN;
     }
 
     public void removeLife() {

@@ -8,7 +8,7 @@ import view.Screen;
 public class Collisions {
 
     public static boolean isIndexTouchWall(int x, int y) {
-        if (x==-1 || x >= Map.getMap().size())
+        if (x == -1 || x >= Map.getMap().size())
             return false;
         return !Map.getMap().get(y).get(x).isPath();
     }
@@ -29,19 +29,23 @@ public class Collisions {
 
     public static boolean isTouchWall(Element element, int dir) {
         return switch (dir) {
-            case Consts.UP -> isIndexTouchWall(element.getIndexPositionX(),(element.getMiddlePixelY()-Screen.getHalfTileSize())/Screen.getTileSize());
+            case Consts.UP ->
+                    isIndexTouchWall(element.getIndexPositionX(), (element.getMiddlePixelY() - Screen.getHalfTileSize()) / Screen.getTileSize());
 
-            case Consts.DOWN -> isIndexTouchWall(element.getIndexPositionX(),(element.getMiddlePixelY()+Screen.getHalfTileSize())/Screen.getTileSize());
+            case Consts.DOWN ->
+                    isIndexTouchWall(element.getIndexPositionX(), (element.getMiddlePixelY() + Screen.getHalfTileSize()) / Screen.getTileSize());
 
-            case Consts.LEFT -> isIndexTouchWall((element.getMiddlePixelX()-Screen.getHalfTileSize())/Screen.getTileSize(), element.getIndexPositionY());
+            case Consts.LEFT ->
+                    isIndexTouchWall((element.getMiddlePixelX() - Screen.getHalfTileSize()) / Screen.getTileSize(), element.getIndexPositionY());
 
-            case Consts.RIGHT -> isIndexTouchWall((element.getMiddlePixelX()+Screen.getHalfTileSize())/Screen.getTileSize(), element.getIndexPositionY());
+            case Consts.RIGHT ->
+                    isIndexTouchWall((element.getMiddlePixelX() + Screen.getHalfTileSize()) / Screen.getTileSize(), element.getIndexPositionY());
 
             default -> false;
         };
     }
 
-    public static boolean isTouching(Element a,Element b) {
+    public static boolean isTouching(Element a, Element b) {
 
         int w = Screen.getTileSize();
         int x1 = a.getPixelPositionX();

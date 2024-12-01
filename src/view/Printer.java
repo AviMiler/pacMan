@@ -1,7 +1,6 @@
 package view;
 
 import control.GameLoop;
-import data.DB.DataBaseHandler;
 import data.DB.ScoreUnit;
 import data.ineerDB.LinkedList;
 import model.Map;

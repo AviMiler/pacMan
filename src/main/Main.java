@@ -1,8 +1,6 @@
 package main;
 
 import model.Map;
-import model.elements.Element;
-import control.GameLoop;
 import view.*;
 
 public class Main {
@@ -11,6 +9,7 @@ public class Main {
         startGame();
 
     }
+
     public static void startGame() {
 
         Map.updateMap();
@@ -18,6 +17,7 @@ public class Main {
         Window.startWindow();
 
     }
+
     public static void restartGame() {
         Window.setPanel(new MenuPanel());
     }

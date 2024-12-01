@@ -1,18 +1,13 @@
 package data.DB;
 
-import data.ineerDB.Arrays;
 import data.ineerDB.LinkedList;
-
 import java.io.*;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class DataBaseHandler {
 
-    private static final String scorePath = "res\\data\\highScores\\highScors";
+    private static final String scorePath = "res\\data\\highScores\\highScores";
 
-    public static LinkedList<ScoreUnit> readScoresFromFile(){
+    public static LinkedList<ScoreUnit> readScoresFromFile() {
 
         LinkedList<ScoreUnit> list = new LinkedList<>();
         try {
@@ -20,7 +15,7 @@ public class DataBaseHandler {
             BufferedReader br = new BufferedReader(new FileReader(scorePath));
             String line;
             ScoreUnit temp;
-            while ((line = br.readLine())!=null) {
+            while ((line = br.readLine()) != null) {
 
                 temp = convertLineToScoreUnit(line);
                 list.add(temp);
@@ -60,7 +55,6 @@ public class DataBaseHandler {
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
-        return new ScoreUnit(name,points);
+        return new ScoreUnit(name, points);
     }
-
 }

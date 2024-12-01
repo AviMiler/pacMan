@@ -8,12 +8,12 @@ import services.Timer;
 import view.*;
 import model.*;
 
-public class GameLoop{
+public class GameLoop {
 
     private static PacMan pacMan;
     private static Arrays<Ghost> ghosts;
-    private static int priseTimeToPut,priseTimeToEnd;
-    private static int chaseTimer,scatterTimer,frightenTimer;
+    private static int priseTimeToPut, priseTimeToEnd;
+    private static int chaseTimer, scatterTimer, frightenTimer;
     private static int gameTime;
     private static int numOfPrise;
     private static int level;
@@ -23,7 +23,7 @@ public class GameLoop{
 
     public static void startGame() {
 
-        gameTime=0;
+        gameTime = 0;
         panel = (GamePanel) Window.getPanel();
         panel.setFocusable(true);
         panel.requestFocusInWindow();
@@ -32,7 +32,7 @@ public class GameLoop{
 
         ///////////////////////the game loop//////////////////////////
 
-        for (level = 1; level < 4 && pacMan.getLife() > 0;level++) {
+        for (level = 1; level < 4 && pacMan.getLife() > 0; level++) {
 
             pacMan.setPosition();
             pacMan.setImage(0);
@@ -45,7 +45,7 @@ public class GameLoop{
 
             theGame();
 
-            if (pacMan.getLife()>0)
+            if (pacMan.getLife() > 0)
                 betweenLevels();
         }
         EndGamePanel endGamePanel = new EndGamePanel(0);
@@ -56,24 +56,24 @@ public class GameLoop{
 
     private static void theGame() {
 
-            boolean start = true;
+        boolean start = true;
 
-            while (pacMan.getLife() > 0) {
-                if (numOfPrise <= 0)
-                    return;
+        while (pacMan.getLife() > 0) {
+            if (numOfPrise < 0)
+                return;
 
-                freeGhostsManager();
-                Timer.waitFor();
+            freeGhostsManager();
+            Timer.waitFor();
 
-                panel.print(pacMan, ghosts);
+            panel.print(pacMan, ghosts);
 
-                if (start) {
-                    start = false;
-                    Timer.waitFor(3);
-                }
-
-                update(panel);
+            if (start) {
+                start = false;
+                Timer.waitFor(3);
             }
+
+            update();
+        }
 
     }
 
@@ -89,19 +89,19 @@ public class GameLoop{
 
     }
 
-    private static void update(GamePanel gamePanel) {
+    private static void update() {
 
         updateTimes();
-        PositionsControl.updatePrise(pacMan,ghosts);
-        PositionsControl.updatePacMan(pacMan, gamePanel);
-        PositionsControl.updateGhosts(ghosts,pacMan);
-        PositionsControl.updateConflict(pacMan,ghosts);
+        PositionsControl.updatePrise(pacMan, ghosts);
+        PositionsControl.updatePacMan(pacMan);
+        PositionsControl.updateGhosts(ghosts, pacMan);
+        PositionsControl.updateConflict(pacMan, ghosts);
 
     }
 
-    public static void setPacmanEaten(){
+    public static void setPacmanEaten() {
 
-        if (pacMan.getLife()>0) {
+        if (pacMan.getLife() > 0) {
             pacMan.setPosition();
             pacMan.setImage(Consts.EATEN);
             ghosts = Ghost.initializeGhostList();
@@ -111,7 +111,7 @@ public class GameLoop{
                 Timer.waitFor(1);
             }
             pacMan.setImage(0);
-            numOfGhostsToReleased=0;
+            numOfGhostsToReleased = 0;
             panel.setDirection();
         }
     }
@@ -119,16 +119,15 @@ public class GameLoop{
     private static void freeGhostsManager() {
 
         int seconds;
-        if (numOfGhostsToReleased < numOfGhostsReleased-1) {
+        if (numOfGhostsToReleased < numOfGhostsReleased - 1) {
             seconds = 3;
-        }
-        else {
+        } else {
             seconds = 10;
         }
-        if ((gameTime%(60*seconds))==0 && numOfGhostsToReleased<4) {
+        if ((gameTime % (60 * seconds)) == 0 && numOfGhostsToReleased < 4) {
             ghosts.get(numOfGhostsToReleased).release();
             numOfGhostsToReleased++;
-            if (seconds==10)
+            if (seconds == 10)
                 numOfGhostsReleased++;
         }
     }
@@ -136,16 +135,16 @@ public class GameLoop{
     //////////////timers and counters//////////////
 
     public static void startPriseTimeToPut() {
-        priseTimeToPut=200;
-        priseTimeToEnd=-1;
+        priseTimeToPut = 200;
+        priseTimeToEnd = -1;
     }
 
-    public static int getPriseTimeToPut(){
+    public static int getPriseTimeToPut() {
         return priseTimeToPut;
     }
 
     public static void startPriseTimeToEnd() {
-        priseTimeToEnd = 5000/level/Map.getPrisePosition().getPrise().getType();
+        priseTimeToEnd = 5000 / level / Map.getPrisePosition().getPrise().getType();
         priseTimeToPut = -1;
     }
 
@@ -154,31 +153,29 @@ public class GameLoop{
     }
 
     public static void startFrightenTimer() {
-        frightenTimer = 500/level;
-        scatterTimer=-1;
-        chaseTimer=-1;
+        frightenTimer = 500 / level;
+        scatterTimer = -1;
+        chaseTimer = -1;
     }
 
     public static void startChaseTimer() {
-        chaseTimer=500 * level;
+        chaseTimer = 500 * level;
         frightenTimer = -1;
-        scatterTimer=-1;
+        scatterTimer = -1;
     }
 
     public static void startScatterTimer() {
-        scatterTimer=500;
-        chaseTimer=-1;
-        frightenTimer=-1;
+        scatterTimer = 500;
+        chaseTimer = -1;
+        frightenTimer = -1;
     }
 
-    public static int getGhostMode(){
-        if (scatterTimer>=0) {
+    public static int getGhostMode() {
+        if (scatterTimer >= 0) {
             return Consts.SCATTER;
-        }
-        else if (chaseTimer>=0) {
+        } else if (chaseTimer >= 0) {
             return Consts.CHASE;
-        }
-        else if (frightenTimer>=0)
+        } else if (frightenTimer >= 0)
             return Consts.FRIGHTENED;
         return 0;
     }
@@ -196,35 +193,35 @@ public class GameLoop{
             scatterTimer--;
         if (chaseTimer > 0)
             chaseTimer--;
-        if (frightenTimer == 0){
+        if (frightenTimer == 0) {
             pacMan.resetGhostEatenCnt();
             startChaseTimer();
-            PositionsControl.updateGhostsMode(ghosts,Consts.CHASE,0);
+            PositionsControl.updateGhostsMode(ghosts, Consts.CHASE, 0);
         }
-        if (chaseTimer == 0){
+        if (chaseTimer == 0) {
             startScatterTimer();
-            PositionsControl.updateGhostsMode(ghosts,Consts.SCATTER,0);
+            PositionsControl.updateGhostsMode(ghosts, Consts.SCATTER, 0);
         }
-        if (scatterTimer == 0){
+        if (scatterTimer == 0) {
             startChaseTimer();
-            PositionsControl.updateGhostsMode(ghosts,Consts.CHASE,0);
+            PositionsControl.updateGhostsMode(ghosts, Consts.CHASE, 0);
         }
 
     }
 
-    public static int getLevel(){
+    public static int getLevel() {
         return level;
     }
 
-    public static int getGameTime(){
+    public static int getGameTime() {
         return gameTime;
     }
 
-    public static void addToPriseCnt(){
+    public static void addToPriseCnt() {
         numOfPrise++;
     }
 
-    public static void removeFromPriseCnt(){
+    public static void removeFromPriseCnt() {
         numOfPrise--;
     }
 }

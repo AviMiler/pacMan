@@ -4,11 +4,10 @@ import model.Map;
 import model.elements.*;
 import services.Consts;
 import data.ineerDB.Arrays;
-import view.GamePanel;
 
 public class PositionsControl {
 
-    public static void updatePacMan(PacMan pacMan, GamePanel gamePanel) {
+    public static void updatePacMan(PacMan pacMan) {
 
         pacMan.beat();
         switch (pacMan.getDirection()) {
@@ -41,16 +40,16 @@ public class PositionsControl {
         pacMan.straitXOrY();
     }
 
-    public static void updatePrise(Element element,Arrays<Ghost> ghosts) {
+    public static void updatePrise(Element element, Arrays<Ghost> ghosts) {
 
         Position position = Map.getPositionAt(element.getIndexPositionY(), element.getIndexPositionX());
 
         if (position.isPrise()) {//pacMan touch
             element.updateScore(position.getPrise().getScore());
-            if (position.getPrise().getType()==1){
+            if (position.getPrise().getType() == 1) {
                 for (int i = 0; i < ghosts.size(); i++) {
-                        ghosts.get(i).setMode(Consts.FRIGHTENED);
-                    }
+                    ghosts.get(i).setMode(Consts.FRIGHTENED);
+                }
                 GameLoop.startFrightenTimer();
             }
             if (position.getPrise().getType() > 1) {
@@ -79,34 +78,33 @@ public class PositionsControl {
             Ghost ghost = ghosts.get(i);
             ghost.beat();
             ghost.isBackFromEaten();
-            ghost.targetCalculator(pacMan,ghosts.get(0));
+            ghost.targetCalculator(pacMan, ghosts.get(0));
             ghost.calculateDirection(ghost.getTarget());
             ghost.setPixelPosition(ghost.getDirection());
             ghost.strait();
         }
     }
 
-    public static void updateGhostsMode(Arrays<Ghost> ghosts,int mode,int ghostNum) {
-        if (ghostNum==0){
+    public static void updateGhostsMode(Arrays<Ghost> ghosts, int mode, int ghostNum) {
+        if (ghostNum == 0) {
             for (int i = 0; i < ghosts.size(); i++) {
                 ghosts.get(i).setMode(mode);
             }
         }
     }
 
-    public static void updateConflict(PacMan pacMan,Arrays<Ghost> ghosts){
+    public static void updateConflict(PacMan pacMan, Arrays<Ghost> ghosts) {
         for (int i = 0; i < ghosts.size(); i++) {
-            if(Collisions.isTouching(pacMan, ghosts.get(i))) {
-                if (!ghosts.get(i).isEatable() && ghosts.get(i).getState()!=Consts.EATEN){//pacman eaten
+            if (Collisions.isTouching(pacMan, ghosts.get(i))) {
+                if (!ghosts.get(i).isEatable() && ghosts.get(i).getState() != Consts.EATEN) {//pacman eaten
                     pacMan.eaten();
                     for (int j = 0; j < ghosts.size(); j++) {
                         ghosts.get(j).setImage(7);
                     }
                     GameLoop.setPacmanEaten();
-                }
-                else if (ghosts.get(i).isEatable()){//ghost eaten
+                } else if (ghosts.get(i).isEatable()) {//ghost eaten
                     ghosts.get(i).setToEatenMode();
-                    pacMan.updateScore(200*pacMan.getGhostEatenCnt());
+                    pacMan.updateScore(200 * pacMan.getGhostEatenCnt());
                     pacMan.addToGhostEatenCnt();
                 }
             }

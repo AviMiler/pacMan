@@ -9,15 +9,13 @@ import model.elements.PacMan;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class EndGamePanel extends MyPanel implements KeyListener {
 
     int choice;
-    boolean endGame=false,gameOver=false,newScore=false;
+    boolean endGame=false,gameOver=false;
     LinkedList<ScoreUnit> scoresList;
     PacMan pacMan;
     String name="",note="";
@@ -128,38 +126,21 @@ public class EndGamePanel extends MyPanel implements KeyListener {
         return button;
     }
 
-    private void setStyledButton(String text,int x,int y,int width, Color backgroundColor, JButton button) {
-
-        button.setBounds(x, y,width, Screen.getScreenHeight()/7);
-        button.setBackground(backgroundColor);
-        button.setText(text);
-        button.setForeground(Color.BLACK);
-        button.setFont(Screen.customFont);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-
-    }
-
     private void setButtons() {
 
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                choice++;//next
-            }
-        });
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                choice++;//exit
-            }
-        });
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                choice=5;//restart
-            }
-        });
+        button1.addActionListener(_ -> b1());
+        button2.addActionListener(_ -> b2());
+        button3.addActionListener(_ -> b3());
+    }
+
+    private void b1() {
+        choice++;//next
+    }
+    private void b2() {
+        choice++;
+    }
+    private void b3() {
+        choice=5;
     }
 
     /////////////////////////////keyFunctions////////////////////////////////

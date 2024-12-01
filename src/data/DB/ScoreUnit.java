@@ -5,7 +5,7 @@ public class ScoreUnit {
     String name;
     int points;
 
-    public ScoreUnit(String name,int points) {
+    public ScoreUnit(String name, int points) {
         this.points = points;
         this.name = name;
     }
@@ -22,11 +22,7 @@ public class ScoreUnit {
         this.name = name;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public String toString(){
+    public String toString() {
         return name + " " + points;
     }
 }

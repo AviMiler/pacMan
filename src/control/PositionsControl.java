@@ -55,7 +55,7 @@ public class PositionsControl {
             if (position.getPrise().getType() > 1) {
                 GameLoop.startPriseTimeToPut();
             }
-            if (position.getPrise().getType() < 2 || position.wasCoin())
+            if (position.getPrise().getType() == 0|| position.wasCoin())
                 GameLoop.removeFromPriseCnt();
             position.deletePrise();
         }

@@ -6,9 +6,9 @@ import data.ineerDB.Arrays;
 import services.Services;
 import view.Screen;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Map {
 
@@ -85,24 +85,27 @@ public class Map {
         return map.get(y).get(x);
     }
 
+
     private static Arrays<Arrays<Integer>> readMap() {
 
         Arrays<Arrays<Integer>> map = new Arrays<>();
-        try {
+        try (InputStream inputStream = Map.class.getClassLoader().getResourceAsStream("maps/map");
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
 
-            BufferedReader br = new BufferedReader(new FileReader(mapPath));
+            if (inputStream == null) {
+                throw new RuntimeException("Map file not found in resources: maps/map");
+            }
+
             String s;
             while ((s = br.readLine()) != null) {
-
                 map.add(convertStringsToInts(s));
-
             }
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error reading map file", e);
         }
 
         return map;
-
     }
 
     private static void analyzeMap(Arrays<Arrays<Integer>> map0) {
@@ -118,7 +121,6 @@ public class Map {
                     GameLoop.addToPriseCnt();
                 } else if (map0.get(i).get(j) == 3) {
                     position = new Position(false, false, 1);
-                    GameLoop.addToPriseCnt();
                 } else if (map0.get(i).get(j) == 2) {
                     position = new Position(false, false, -2);
                 } else {

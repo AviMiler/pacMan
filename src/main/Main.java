@@ -19,6 +19,7 @@ public class Main {
     }
 
     public static void restartGame() {
+        Map.updateMap();
         Window.setPanel(new MenuPanel());
     }
 

@@ -5,6 +5,7 @@ import model.Map;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Screen {
 
@@ -15,10 +16,13 @@ public class Screen {
     public static Font customFont;
 
     static {
-        try {
-            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("res\\font\\ARCADE_N.TTF")).deriveFont(24f);
+        try (InputStream fontStream = Screen.class.getClassLoader().getResourceAsStream("font/ARCADE_N.TTF")) {
+            if (fontStream == null) {
+                throw new RuntimeException("Font file not found: font/ARCADE_N.TTF");
+            }
+            customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(24f);
         } catch (FontFormatException | IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to load custom font", e);
         }
     }
 

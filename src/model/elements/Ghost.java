@@ -63,7 +63,6 @@ public class Ghost extends Element {
     //////////////////////////////setters//////////////////////////////
 
     public void setMode(int mode) {
-
         if (isReleased) {
             switch (mode) {
                 case Consts.FRIGHTENED:
@@ -96,7 +95,8 @@ public class Ghost extends Element {
         pictureType = Consts.FRIGHTENED;
         speed = 1;
         eatable = true;
-        this.straitXY();
+        if (!isNowReleased())
+            this.straitXY();
     }
 
     public void setToChaseMode() {
@@ -105,7 +105,8 @@ public class Ghost extends Element {
         state = Consts.CHASE;
         eatable = false;
         speed = 2;
-        this.straitXY();
+        if (!isNowReleased())
+            this.straitXY();
     }
 
     public void setToScatterMode() {
@@ -113,7 +114,8 @@ public class Ghost extends Element {
         pictureType = type;
         state = Consts.SCATTER;
         eatable = false;
-        this.straitXY();
+        if (!isNowReleased())
+            this.straitXY();
         speed = 2;
     }
 
@@ -122,7 +124,8 @@ public class Ghost extends Element {
         state = Consts.EATEN;
         imageNum = 3;
         speed = 4;
-        this.straitXY();
+        if (!isNowReleased())
+            this.straitXY();
         direction = 0;
         eatable = false;
     }
@@ -173,7 +176,7 @@ public class Ghost extends Element {
                 }
             }
 
-        } else if (Collisions.isIndexTouchWall(this, direction) && isInJunction())
+        }else if (Collisions.isIndexTouchWall(this, direction) && isInJunction())
             reverse();
     }
 

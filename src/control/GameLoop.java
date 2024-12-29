@@ -59,7 +59,7 @@ public class GameLoop {
         boolean start = true;
 
         while (pacMan.getLife() > 0) {
-            if (numOfPrise < 0)
+            if (numOfPrise <= 0)
                 return;
 
             freeGhostsManager();
@@ -71,7 +71,6 @@ public class GameLoop {
                 start = false;
                 Timer.waitFor(3);
             }
-
             update();
         }
 

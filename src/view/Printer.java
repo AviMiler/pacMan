@@ -10,6 +10,7 @@ import data.ineerDB.Arrays;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class Printer extends JPanel {
 
@@ -18,28 +19,27 @@ public class Printer extends JPanel {
     public static void printMap(Graphics2D g) {
         Image image;
         int screenX = 0, screenY = 0;
+        if (!Map.getMap().isEmpty() && !Map.getMap().get(0).isEmpty()) {
+            for (int i = 0; i < Map.getMap().size(); i++) {
+                for (int j = 0; j < Map.getMap().get(i).size(); j++) {
 
-        for (int i = 0; i < Map.getMap().size(); i++) {
-            for (int j = 0; j < Map.getMap().get(i).size(); j++) {
-
-                if (Map.getMap().get(i).get(j).isWall()) {
-                    image = new ImageIcon(Map.getMapElementPath()+"1.png").getImage();
-                } else if (Map.getMap().get(i).get(j).isPrise()) {
-                    image = new ImageIcon(Map.getMap().get(i).get(j).getPrise().getImagesPath()).getImage();
-                } else if (Map.getMap().get(i).get(j).isGate()) {
-                    image = new ImageIcon(Map.getMapElementPath()+"2.png").getImage();
-                }else
-                    image = new ImageIcon("dd").getImage();
+                    if (Map.getMap().get(i).get(j).isWall()) {
+                        image = new ImageIcon(Map.getMapElementPath() + "1.png").getImage();
+                    } else if (Map.getMap().get(i).get(j).isPrise()) {
+                        image = new ImageIcon(Map.getMap().get(i).get(j).getPrise().getImagesPath()).getImage();
+                    } else if (Map.getMap().get(i).get(j).isGate()) {
+                        image = new ImageIcon(Map.getMapElementPath() + "2.png").getImage();
+                    } else
+                        image = new ImageIcon("dd").getImage();
 
 
-
-                g.drawImage(image, screenX, screenY + m, Screen.getTileSize(), Screen.getTileSize(), null);
-                screenX += Screen.getTileSize();
+                    g.drawImage(image, screenX, screenY + m, Screen.getTileSize(), Screen.getTileSize(), null);
+                    screenX += Screen.getTileSize();
+                }
+                screenY += Screen.getTileSize();
+                screenX = 0;
             }
-            screenY += Screen.getTileSize();
-            screenX = 0;
         }
-
     }
 
     public static void printPacMan(PacMan pacMan, Graphics2D g) {
@@ -65,7 +65,7 @@ public class Printer extends JPanel {
     }
 
     private static void printLife(PacMan pacMan, Graphics2D g) {
-        Image image = new ImageIcon("res\\info\\life.png").getImage();
+        Image image = new ImageIcon(Objects.requireNonNull(Screen.class.getClassLoader().getResource("info/life.png"))).getImage();
         for (int i = pacMan.getLife(); i > 0; i--) {
             g.drawImage(image,Screen.getScreenWidth()-i*(Screen.getTileSize()+10), 0,Screen.getTileSize(),Screen.getTileSize(),null);
         }

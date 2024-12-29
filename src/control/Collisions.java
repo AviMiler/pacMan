@@ -30,13 +30,13 @@ public class Collisions {
     public static boolean isTouchWall(Element element, int dir) {
         return switch (dir) {
             case Consts.UP ->
-                    isIndexTouchWall(element.getIndexPositionX(), (element.getMiddlePixelY() - Screen.getHalfTileSize()) / Screen.getTileSize());
+                    isIndexTouchWall(element.getIndexPositionX(), (element.getMiddlePixelY() - Screen.getHalfTileSize() - 3) / Screen.getTileSize());
 
             case Consts.DOWN ->
                     isIndexTouchWall(element.getIndexPositionX(), (element.getMiddlePixelY() + Screen.getHalfTileSize()) / Screen.getTileSize());
 
             case Consts.LEFT ->
-                    isIndexTouchWall((element.getMiddlePixelX() - Screen.getHalfTileSize()) / Screen.getTileSize(), element.getIndexPositionY());
+                    isIndexTouchWall((element.getMiddlePixelX() - Screen.getHalfTileSize() - 2) / Screen.getTileSize(), element.getIndexPositionY());
 
             case Consts.RIGHT ->
                     isIndexTouchWall((element.getMiddlePixelX() + Screen.getHalfTileSize()) / Screen.getTileSize(), element.getIndexPositionY());

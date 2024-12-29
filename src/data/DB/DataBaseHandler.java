@@ -8,42 +8,42 @@ public class DataBaseHandler {
     private static final String scorePath = "res\\data\\highScores\\highScores";
 
     public static LinkedList<ScoreUnit> readScoresFromFile() {
-
         LinkedList<ScoreUnit> list = new LinkedList<>();
-        try {
 
-            BufferedReader br = new BufferedReader(new FileReader(scorePath));
+        try (InputStream inputStream = DataBaseHandler.class.getClassLoader().getResourceAsStream(scorePath);
+             BufferedReader br = inputStream != null
+                     ? new BufferedReader(new InputStreamReader(inputStream))
+                     : new BufferedReader(new FileReader(scorePath))) {
+
             String line;
-            ScoreUnit temp;
             while ((line = br.readLine()) != null) {
-
-                temp = convertLineToScoreUnit(line);
+                ScoreUnit temp = convertLineToScoreUnit(line);
                 list.add(temp);
-
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error reading scores file", e);
         }
+
         return list;
     }
 
     public static void saveScoresListToFile(LinkedList<ScoreUnit> scoresList) {
+        File file = new File(scorePath);
 
-        try {
-            File file = new File(scorePath);
-            file.delete();
-            file.createNewFile();
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        // Resolve external writable path if necessary
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
 
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
             for (int i = 0; i < scoresList.size(); i++) {
                 bw.write(scoresList.get(i).getName() + "@" + scoresList.get(i).getPoints() + "\n");
             }
-            bw.close();
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error saving scores to file: " + e.getMessage(), e);
         }
     }
+
 
     private static ScoreUnit convertLineToScoreUnit(String line) {
         String[] parts = line.split("@");

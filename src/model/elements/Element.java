@@ -242,7 +242,4 @@ public class Element implements ElementInterface{
         this.score+=score;
     }
 
-    public void upSpeed(){
-        this.speed++;
-    }
 }

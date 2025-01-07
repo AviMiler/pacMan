@@ -91,7 +91,6 @@ public class Printer extends JPanel {
         if (priseTime!=-1){
             g.drawString("Prise time:" + priseTime/60, 0, 52);
         }
-        g.drawString("Prise left:" + GameLoop.getNumOfPrise(), 0, 68);
     }
 
     public static void printEndLevel(Graphics2D g){

@@ -61,7 +61,6 @@ public class GameLoop {
         while (pacMan.getLife() > 0) {
             if (numOfPrise <= 0)
                 return;
-            System.out.println("numOfPrise: " + numOfPrise);
             freeGhostsManager();
             Timer.waitFor();
 

@@ -4,8 +4,10 @@ import model.Map;
 import model.elements.*;
 import services.Consts;
 import data.ineerDB.Arrays;
+import services.Services;
 
 public class PositionsControl {
+
 
     public static void updatePacMan(PacMan pacMan) {
 
@@ -55,7 +57,7 @@ public class PositionsControl {
             if (position.getPrise().getType() > 1) {
                 GameLoop.startPriseTimeToPut();
             }
-            if (position.getPrise().getType() == 0|| position.wasCoin())
+            if (position.getPrise().getType() == 0 || position.wasCoin())
                 GameLoop.removeFromPriseCnt();
             position.deletePrise();
         }
@@ -75,6 +77,7 @@ public class PositionsControl {
     public static void updateGhosts(Arrays<Ghost> ghosts, PacMan pacMan) {
 
         for (int i = 0; i < ghosts.size(); i++) {
+
             Ghost ghost = ghosts.get(i);
             ghost.beat();
             ghost.isBackFromEaten();

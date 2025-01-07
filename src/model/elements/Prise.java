@@ -1,5 +1,6 @@
 package model.elements;
 
+import services.Consts;
 import services.Services;
 
 public class Prise extends Element {
@@ -11,9 +12,8 @@ public class Prise extends Element {
         super(0, 0);
         this.type = type;
         this.score = priseScores[this.type];
-        this.imagesPath = "res\\prises\\" + this.type + ".png";
+        this.imagesPath = Consts.ELEMENT_PATH + "prises\\" + this.type + ".png";
         this.time = this.time / (type + 1);
-
     }
 
     public Prise() {
@@ -22,7 +22,7 @@ public class Prise extends Element {
         this.getIndexPoint().y = 9;
         this.type = calculateType();
         this.score = priseScores[type];
-        this.imagesPath = "res\\prises\\" + type + ".png";
+        this.imagesPath = Consts.ELEMENT_PATH+"prises\\" + type + ".png";
         this.time = this.time / (type + 1);
 
     }

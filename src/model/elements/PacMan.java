@@ -12,12 +12,12 @@ public class PacMan extends Element {
     public PacMan() {
         super(0, 0);
 
-        speed = 3;
+        speed = 4;
         type = 1;
         pictureType = type;
         state = 0;
         life = 3;
-        imagesPath = "res\\pacMan\\";
+        imagesPath = Consts.ELEMENT_PATH+"pacMan\\";
         setImage(0);
         score = 0;
         beat = 0;

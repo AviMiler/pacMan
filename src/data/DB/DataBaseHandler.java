@@ -1,11 +1,15 @@
 package data.DB;
 
 import data.ineerDB.LinkedList;
+import services.Consts;
+import services.Services;
+
 import java.io.*;
 
 public class DataBaseHandler {
 
-    private static final String scorePath = "res\\data\\highScores\\highScores";
+   private static final String scorePath = Consts.ELEMENT_PATH+"data\\highScores\\highScores";
+//    private static final String scorePath = "resources/data/highScores/highScores";
 
     public static LinkedList<ScoreUnit> readScoresFromFile() {
         LinkedList<ScoreUnit> list = new LinkedList<>();
@@ -26,6 +30,23 @@ public class DataBaseHandler {
 
         return list;
     }
+
+//    public static LinkedList<ScoreUnit> readScoresFromFile() {
+//        LinkedList<ScoreUnit> list = new LinkedList<>();
+//
+//        try  {
+//            BufferedReader br = Services.getReader(scorePath);
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                ScoreUnit temp = convertLineToScoreUnit(line);
+//                list.add(temp);
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException("Error reading scores file", e);
+//        }
+//
+//        return list;
+//    }
 
     public static void saveScoresListToFile(LinkedList<ScoreUnit> scoresList) {
         File file = new File(scorePath);

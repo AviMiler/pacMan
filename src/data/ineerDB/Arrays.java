@@ -11,7 +11,12 @@ public class Arrays<T>{
     }
 
     public T get(int i){
-        return list.get(i);
+        try {
+            return list.get(i);
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
     public void set(int i, T t){

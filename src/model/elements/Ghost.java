@@ -25,7 +25,7 @@ public class Ghost extends Element {
         super(9 + type, 10);
         this.type = type;
         pictureType = type;
-        imagesPath = "res\\ghosts\\";
+        imagesPath = Consts.ELEMENT_PATH+"ghosts\\";
         setImage(0);
         this.speed = 2;
         this.eatable = false;
@@ -60,9 +60,13 @@ public class Ghost extends Element {
         return eatable;
     }
 
+
     //////////////////////////////setters//////////////////////////////
 
     public void setMode(int mode) {
+        if (state==Consts.FRIGHTENED && isNowReleased()) {//fix change speed when get out bug
+            setPixelPositionY(getPixelPositionY() / 2 * 2);
+        }
         if (isReleased) {
             switch (mode) {
                 case Consts.FRIGHTENED:
@@ -79,18 +83,19 @@ public class Ghost extends Element {
                     break;
             }
         }
+
     }
 
     public void setToFrightenMode() {
         imageNum = 1;
-        if (direction == 2)
-            direction = 4;
-        else if (direction == 1)
-            direction = 3;
-        else if (direction == 3)
-            direction = 1;
-        else if (direction == 4 && !isNowReleased())
-            direction = 2;
+        if (direction == Consts.DOWN)
+            direction = Consts.UP;
+        else if (direction == Consts.RIGHT)
+            direction = Consts.LEFT;
+        else if (direction == Consts.LEFT)
+            direction = Consts.RIGHT;
+        else if (direction == Consts.UP && !isNowReleased())
+            direction = Consts.DOWN;
         state = Consts.FRIGHTENED;
         pictureType = Consts.FRIGHTENED;
         speed = 1;
@@ -144,7 +149,7 @@ public class Ghost extends Element {
         }
     }
 
-    private boolean isNowReleased() {
+    public boolean isNowReleased() {
         return Map.getMap().get(this.getIndexPositionY() + 1).get(this.getIndexPositionX()).isGate() ||
                 Map.getMap().get(this.getIndexPositionY() - 1).get(this.getIndexPositionX()).isGate() ||
                 Map.getMap().get(this.getIndexPositionY()).get(this.getIndexPositionX()).isGate();
@@ -152,7 +157,6 @@ public class Ghost extends Element {
     //////////////////////////////direction calculator//////////////////////////////
 
     public void calculateDirection(Point target) {
-
         Arrays<Integer> possibleDirections = possibleDirections();
         Point nextPosition1;
         Point nextPosition2;
@@ -165,8 +169,6 @@ public class Ghost extends Element {
         } else if (!possibleDirections.isEmpty()) {
             nextPosition1 = setPixelPosition(this, possibleDirections.get(0));
             this.direction = possibleDirections.get(0);
-
-
             for (int i = 1; i < possibleDirections.size(); i++) {
                 nextPosition2 = setPixelPosition(this, possibleDirections.get(i));
                 if (checkIfBCloserThenA(nextPosition1, nextPosition2, target)) {
@@ -184,8 +186,9 @@ public class Ghost extends Element {
         final Arrays<Integer> possibleDirections = new Arrays<>();
         for (int newDirection = 4; newDirection > 0; newDirection--) {
             if (newDirection != this.direction + 2 && newDirection != this.direction - 2) {//check if reverse
-                if (!Collisions.isIndexTouchWall(this, newDirection) && isInJunction())
+                if (!Collisions.isIndexTouchWall(this, newDirection) && isInJunction()) {
                     possibleDirections.add(newDirection);
+                }
             }
         }
         return possibleDirections;

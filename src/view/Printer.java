@@ -65,7 +65,7 @@ public class Printer extends JPanel {
     }
 
     private static void printLife(PacMan pacMan, Graphics2D g) {
-        Image image = new ImageIcon(Objects.requireNonNull(Screen.class.getClassLoader().getResource("info/life.png"))).getImage();
+        Image image = new ImageIcon("resources\\info\\life.png").getImage();
         for (int i = pacMan.getLife(); i > 0; i--) {
             g.drawImage(image,Screen.getScreenWidth()-i*(Screen.getTileSize()+10), 0,Screen.getTileSize(),Screen.getTileSize(),null);
         }
@@ -91,7 +91,7 @@ public class Printer extends JPanel {
         if (priseTime!=-1){
             g.drawString("Prise time:" + priseTime/60, 0, 52);
         }
-
+        g.drawString("Prise left:" + GameLoop.getNumOfPrise(), 0, 68);
     }
 
     public static void printEndLevel(Graphics2D g){

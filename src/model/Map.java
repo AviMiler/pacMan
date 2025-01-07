@@ -14,8 +14,8 @@ public class Map {
 
     private static Arrays<Arrays<Position>> map;
     private static Arrays<Position> listOfPositions;
-    private static final String mapElementsPath = "res\\mapElements\\";
-    private static final String mapPath = "res\\maps\\map";
+    private static final String mapElementsPath = "resources\\mapElements\\";
+    private static final String mapPath = "resources\\maps\\map";
     private static Position prisePosition;
 
     public static void updateMap() {
@@ -30,15 +30,17 @@ public class Map {
         return map;
     }
 
-    public static void putPrise() {
+    public static void  putPrise() {
         prisePosition = listOfPositions.get(Services.getRandomInt(0, listOfPositions.size() - 1));
         prisePosition.setPrise(-1);
     }
 
     public static void deletePrise() {
         if (prisePosition != null) {
-            if (!prisePosition.wasCoin())
+            if (!prisePosition.wasCoin()) {
                 prisePosition.deletePrise();
+                //GameLoop.removeFromPriseCnt();
+            }
             else
                 prisePosition.setPrise(0);
         }
@@ -89,13 +91,9 @@ public class Map {
     private static Arrays<Arrays<Integer>> readMap() {
 
         Arrays<Arrays<Integer>> map = new Arrays<>();
-        try (InputStream inputStream = Map.class.getClassLoader().getResourceAsStream("maps/map");
-             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
 
-            if (inputStream == null) {
-                throw new RuntimeException("Map file not found in resources: maps/map");
-            }
-
+        try  {
+            BufferedReader br = new BufferedReader(new FileReader(mapPath));
             String s;
             while ((s = br.readLine()) != null) {
                 map.add(convertStringsToInts(s));
@@ -111,6 +109,7 @@ public class Map {
     private static void analyzeMap(Arrays<Arrays<Integer>> map0) {
 
         Position position;
+        GameLoop.resetPriseCnt();
         for (int i = 0; i < map0.size(); i++) {
             map.add(new Arrays<>());
             for (int j = 0; j < map0.get(i).size(); j++) {

@@ -15,23 +15,24 @@ public class Screen {
     private static int maxCol = Map.getTilesWidth();
     public static Font customFont;
 
-    static {
-        try (InputStream fontStream = Screen.class.getClassLoader().getResourceAsStream("font/ARCADE_N.TTF")) {
-            if (fontStream == null) {
-                throw new RuntimeException("Font file not found: font/ARCADE_N.TTF");
+    public static Font loadCustomFont(String fontFilePath, float size) {
+        try {
+            // טוען את קובץ הפונט לפי נתיב ישיר
+            File fontFile = new File(fontFilePath);
+            if (!fontFile.exists()) {
+                throw new RuntimeException("Font file not found: " + fontFilePath);
             }
-            customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(24f);
+            Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            return font.deriveFont(size); // גודל הפונט
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException("Failed to load custom font", e);
         }
     }
 
-    public Screen() throws IOException, FontFormatException {
-    }
-
     public static void updateScreen() {
         maxRow = Map.getTilesHeight() + 2;
         maxCol = Map.getTilesWidth();
+        customFont=loadCustomFont("resources\\font\\ARCADE_N.TTF",24f);
     }
 
     public static int getTileSize(){

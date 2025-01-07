@@ -61,7 +61,7 @@ public class GameLoop {
         while (pacMan.getLife() > 0) {
             if (numOfPrise <= 0)
                 return;
-
+            System.out.println("numOfPrise: " + numOfPrise);
             freeGhostsManager();
             Timer.waitFor();
 
@@ -78,7 +78,6 @@ public class GameLoop {
 
     private static void betweenLevels() {
 
-        numOfPrise = 0;
         Map.updateMap();
         pacMan.addLife();
         panel.endLevel();
@@ -216,8 +215,15 @@ public class GameLoop {
         return gameTime;
     }
 
+    public static int getNumOfPrise(){
+        return numOfPrise;
+    }
     public static void addToPriseCnt() {
         numOfPrise++;
+    }
+
+    public static void resetPriseCnt(){
+        numOfPrise = 0;
     }
 
     public static void removeFromPriseCnt() {

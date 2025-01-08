@@ -45,6 +45,20 @@ public class Services {
         return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
 
+    public static BufferedWriter getFileWriter(String filePath) throws IOException {
+        // ננסה לכתוב כקובץ רגיל
+        OutputStream outputStream;
+        try {
+            outputStream = new FileOutputStream(filePath);
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("הקובץ לא נמצא או לא ניתן לכתוב אליו: " + filePath);
+        }
+
+        return new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+    }
+
+
+
     public static Image loadImage(String resourcePath) {;
         try {
             // Use ClassLoader to access the resource

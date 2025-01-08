@@ -8,7 +8,7 @@ import java.io.*;
 
 public class DataBaseHandler {
 
-   private static final String scorePath = Consts.ELEMENT_PATH+"data/highScores/highScores";
+   private static final String scorePath = "src/"+Consts.ELEMENT_PATH+"data/highScores/highScores";
 
     public static LinkedList<ScoreUnit> readScoresFromFile() {
         LinkedList<ScoreUnit> list = new LinkedList<>();
@@ -41,7 +41,7 @@ public class DataBaseHandler {
             file.getParentFile().mkdirs();
         }
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
+        try (BufferedWriter bw = Services.getFileWriter(scorePath)) {
             for (int i = 0; i < scoresList.size(); i++) {
                 bw.write(scoresList.get(i).getName() + "@" + scoresList.get(i).getPoints() + "\n");
             }

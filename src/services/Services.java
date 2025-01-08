@@ -1,6 +1,11 @@
 package services;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class Services {
@@ -18,18 +23,38 @@ public class Services {
 
     }
 
-    public static BufferedReader getReader(String fileName) {
+    public static BufferedReader getFileReader(String filePath) throws IOException {
+        // ננסה קודם לקרוא כמשאב (resource)
+        InputStream inputStream = Services.class.getClassLoader().getResourceAsStream(filePath);
 
-        BufferedReader reader;
-        try (InputStream inputStream = Services.class.getClassLoader().getResourceAsStream(fileName)) {
-            if (inputStream == null) {
-                throw new RuntimeException("File not found: " + fileName);
+        // אם לא הצלחנו לקרוא כמשאב, ננסה לקרוא כקובץ רגיל
+        if (inputStream == null) {
+            try {
+                inputStream = new FileInputStream(filePath);
+            } catch (FileNotFoundException e) {
+                // אם גם זה נכשל, ננסה לקרוא כ-URL
+                URL url = Services.class.getClassLoader().getResource(filePath);
+                if (url != null) {
+                    inputStream = url.openStream();
+                } else {
+                    throw new FileNotFoundException("הקובץ לא נמצא: " + filePath);
+                }
             }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read the file ", e);
         }
-        return reader;
+
+        return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
     }
 
+    public static Image loadImage(String resourcePath) {;
+        try {
+            // Use ClassLoader to access the resource
+            InputStream inputStream = Services.class.getClassLoader().getResourceAsStream(resourcePath);
+            if (inputStream == null) {
+                throw new RuntimeException("Image file not found: " + resourcePath);
+            }
+            return new ImageIcon(ImageIO.read(inputStream)).getImage();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

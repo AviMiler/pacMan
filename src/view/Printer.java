@@ -1,12 +1,14 @@
 package view;
 
 import control.GameLoop;
+import data.DB.ResourcesHandler;
 import data.DB.ScoreUnit;
 import data.ineerDB.LinkedList;
 import model.Map;
 import model.elements.Ghost;
 import model.elements.PacMan;
 import data.ineerDB.Arrays;
+import services.Services;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,11 +26,11 @@ public class Printer extends JPanel {
                 for (int j = 0; j < Map.getMap().get(i).size(); j++) {
 
                     if (Map.getMap().get(i).get(j).isWall()) {
-                        image = new ImageIcon(Map.getMapElementPath() + "1.png").getImage();
+                        image = ResourcesHandler.getImage(Map.getMapElementPath() + "1.png");
                     } else if (Map.getMap().get(i).get(j).isPrise()) {
-                        image = new ImageIcon(Map.getMap().get(i).get(j).getPrise().getImagesPath()).getImage();
+                        image = ResourcesHandler.getImage(Map.getMap().get(i).get(j).getPrise().getImagesPath());
                     } else if (Map.getMap().get(i).get(j).isGate()) {
-                        image = new ImageIcon(Map.getMapElementPath() + "2.png").getImage();
+                        image = ResourcesHandler.getImage(Map.getMapElementPath() + "2.png");
                     } else
                         image = new ImageIcon("dd").getImage();
 
@@ -65,7 +67,7 @@ public class Printer extends JPanel {
     }
 
     private static void printLife(PacMan pacMan, Graphics2D g) {
-        Image image = new ImageIcon("resources\\info\\life.png").getImage();
+        Image image = ResourcesHandler.getImage("resources/info/life.png");
         for (int i = pacMan.getLife(); i > 0; i--) {
             g.drawImage(image,Screen.getScreenWidth()-i*(Screen.getTileSize()+10), 0,Screen.getTileSize(),Screen.getTileSize(),null);
         }

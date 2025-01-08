@@ -8,16 +8,18 @@ import java.io.*;
 
 public class DataBaseHandler {
 
-   private static final String scorePath = Consts.ELEMENT_PATH+"data\\highScores\\highScores";
-//    private static final String scorePath = "resources/data/highScores/highScores";
+   private static final String scorePath = Consts.ELEMENT_PATH+"data/highScores/highScores";
 
     public static LinkedList<ScoreUnit> readScoresFromFile() {
         LinkedList<ScoreUnit> list = new LinkedList<>();
-
-        try (InputStream inputStream = DataBaseHandler.class.getClassLoader().getResourceAsStream(scorePath);
-             BufferedReader br = inputStream != null
-                     ? new BufferedReader(new InputStreamReader(inputStream))
-                     : new BufferedReader(new FileReader(scorePath))) {
+        BufferedReader br;
+        try {
+            try {
+                br = Services.getFileReader(scorePath);
+            }
+            catch (FileNotFoundException e) {
+                br = Services.getFileReader(scorePath.substring(4));
+            }
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -31,27 +33,10 @@ public class DataBaseHandler {
         return list;
     }
 
-//    public static LinkedList<ScoreUnit> readScoresFromFile() {
-//        LinkedList<ScoreUnit> list = new LinkedList<>();
-//
-//        try  {
-//            BufferedReader br = Services.getReader(scorePath);
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                ScoreUnit temp = convertLineToScoreUnit(line);
-//                list.add(temp);
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException("Error reading scores file", e);
-//        }
-//
-//        return list;
-//    }
 
     public static void saveScoresListToFile(LinkedList<ScoreUnit> scoresList) {
         File file = new File(scorePath);
 
-        // Resolve external writable path if necessary
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }

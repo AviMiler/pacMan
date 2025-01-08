@@ -25,7 +25,7 @@ public class Ghost extends Element {
         super(9 + type, 10);
         this.type = type;
         pictureType = type;
-        imagesPath = Consts.ELEMENT_PATH+"ghosts\\";
+        imagesPath = Consts.ELEMENT_PATH+"ghosts/";
         setImage(0);
         this.speed = 2;
         this.eatable = false;

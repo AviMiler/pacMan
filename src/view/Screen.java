@@ -1,6 +1,8 @@
 package view;
 
 import model.Map;
+import services.Consts;
+import services.Services;
 
 import java.awt.*;
 import java.io.File;
@@ -17,12 +19,12 @@ public class Screen {
 
     public static Font loadCustomFont(String fontFilePath, float size) {
         try {
-            // טוען את קובץ הפונט לפי נתיב ישיר
-            File fontFile = new File(fontFilePath);
-            if (!fontFile.exists()) {
-                throw new RuntimeException("Font file not found: " + fontFilePath);
+            // טוען את קובץ הפונט כמשאב באמצעות ClassLoader
+            InputStream fontStream = Services.class.getClassLoader().getResourceAsStream(fontFilePath);
+            if (fontStream == null) {
+                throw new RuntimeException("Font resource not found: " + fontFilePath);
             }
-            Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+            Font font = Font.createFont(Font.TRUETYPE_FONT, fontStream);
             return font.deriveFont(size); // גודל הפונט
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException("Failed to load custom font", e);
@@ -32,7 +34,7 @@ public class Screen {
     public static void updateScreen() {
         maxRow = Map.getTilesHeight() + 2;
         maxCol = Map.getTilesWidth();
-        customFont=loadCustomFont("resources\\font\\ARCADE_N.TTF",24f);
+        customFont=loadCustomFont(Consts.ELEMENT_PATH+"font/ARCADE_N.TTF",24f);
     }
 
     public static int getTileSize(){

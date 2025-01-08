@@ -17,7 +17,7 @@ public class PacMan extends Element {
         pictureType = type;
         state = 0;
         life = 3;
-        imagesPath = Consts.ELEMENT_PATH+"pacMan\\";
+        imagesPath = Consts.ELEMENT_PATH+"pacMan/";
         setImage(0);
         score = 0;
         beat = 0;

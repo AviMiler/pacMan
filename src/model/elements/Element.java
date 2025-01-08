@@ -1,7 +1,9 @@
 package model.elements;
 
+import data.DB.ResourcesHandler;
 import model.Map;
 import services.Consts;
+import services.Services;
 import view.Screen;
 
 import javax.swing.*;
@@ -203,25 +205,10 @@ public class Element implements ElementInterface{
         String dir = directions[direction];
         if (pictureType==Consts.FRIGHTENED)
             dir = directions[Consts.FRIGHTENED];
-        image=loadImage(imagesPath + this.pictureType +"\\"+ dir +imageNum+ ".png");
+        image= ResourcesHandler.getImage(imagesPath + this.pictureType +"/"+ dir +imageNum+ ".png");
     }
 
-    private Image loadImage(String relativePath) {
-        // First attempt: Try loading from the classpath
-        URL resource = getClass().getResource(relativePath);
-        if (resource != null) {
-            return new ImageIcon(resource).getImage();
-        }
 
-        // Second attempt: Fallback to file system (for development or non-JAR execution)
-        File file = new File(relativePath);
-        if (file.exists()) {
-            return new ImageIcon(file.getAbsolutePath()).getImage();
-        }
-
-        // If the image is not found, silently return null or a default image
-        return null;  // You can return a default image if needed
-    }
 
     public void beat() {
         beat++;

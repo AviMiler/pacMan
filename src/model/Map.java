@@ -3,6 +3,7 @@ package model;
 import control.GameLoop;
 import model.elements.Position;
 import data.ineerDB.Arrays;
+import services.Consts;
 import services.Services;
 import view.Screen;
 
@@ -14,8 +15,8 @@ public class Map {
 
     private static Arrays<Arrays<Position>> map;
     private static Arrays<Position> listOfPositions;
-    private static final String mapElementsPath = "resources\\mapElements\\";
-    private static final String mapPath = "resources\\maps\\map";
+    private static final String mapElementsPath = Consts.ELEMENT_PATH+"mapElements/";
+    private static final String mapPath = Consts.ELEMENT_PATH+"maps/map";
     private static Position prisePosition;
 
     public static void updateMap() {
@@ -91,9 +92,11 @@ public class Map {
     private static Arrays<Arrays<Integer>> readMap() {
 
         Arrays<Arrays<Integer>> map = new Arrays<>();
+        BufferedReader br;
 
         try  {
-            BufferedReader br = new BufferedReader(new FileReader(mapPath));
+
+            br = Services.getFileReader(mapPath);
             String s;
             while ((s = br.readLine()) != null) {
                 map.add(convertStringsToInts(s));

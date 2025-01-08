@@ -1,5 +1,6 @@
 package main;
 
+import data.DB.ResourcesHandler;
 import model.Map;
 import view.*;
 
@@ -14,6 +15,7 @@ public class Main {
 
         Map.updateMap();
         Screen.updateScreen();
+        ResourcesHandler.loadImages();
         Window.startWindow();
 
     }
